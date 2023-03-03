@@ -1,0 +1,389 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>Dubbo学习笔记 | 幻想家的秘密基地</title><meta name="author" content="Xue_Water"><meta name="copyright" content="Xue_Water"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Dubbo基础Dubbo的基本应用什么是DubboDubbo是阿里巴巴公司开源的一个高性能、轻量级的 Java RPC 框架 致力于提供高性能和透明化的 RPC 远程服务调用方案，以及 SOA 服务治理方案。 Dubbo的发展历史2011&#x2F;10&#x2F;27： 阿里巴巴巴宣布 Dubbo 开源。 2012&#x2F;10&#x2F;23： 发布最后一个版本 2.5.3 并停止维护更新。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dubbo学习笔记">
+<meta property="og:url" content="https://water001-maker.github.io/2023/03/01/Dubbo/index.html">
+<meta property="og:site_name" content="幻想家的秘密基地">
+<meta property="og:description" content="Dubbo基础Dubbo的基本应用什么是DubboDubbo是阿里巴巴公司开源的一个高性能、轻量级的 Java RPC 框架 致力于提供高性能和透明化的 RPC 远程服务调用方案，以及 SOA 服务治理方案。 Dubbo的发展历史2011&#x2F;10&#x2F;27： 阿里巴巴巴宣布 Dubbo 开源。 2012&#x2F;10&#x2F;23： 发布最后一个版本 2.5.3 并停止维护更新。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://water001-maker.github.io/img/cover9.png">
+<meta property="article:published_time" content="2023-02-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-03T04:25:03.246Z">
+<meta property="article:author" content="Xue_Water">
+<meta property="article:tag" content="Dubbo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://water001-maker.github.io/img/cover9.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://water001-maker.github.io/2023/03/01/Dubbo/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Dubbo学习笔记',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-03 12:25:03'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = url => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      link.onload = () => resolve()
+      link.onerror = () => reject()
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover9.png')"><nav id="nav"><span id="blog-info"><a href="/" title="幻想家的秘密基地"><span class="site-name">幻想家的秘密基地</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Dubbo学习笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-28T16:00:00.000Z" title="发表于 2023-03-01 00:00:00">2023-03-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-03T04:25:03.246Z" title="更新于 2023-03-03 12:25:03">2023-03-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Dubbo学习笔记"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Dubbo基础"><a href="#Dubbo基础" class="headerlink" title="Dubbo基础"></a>Dubbo基础</h1><h2 id="Dubbo的基本应用"><a href="#Dubbo的基本应用" class="headerlink" title="Dubbo的基本应用"></a>Dubbo的基本应用</h2><h3 id="什么是Dubbo"><a href="#什么是Dubbo" class="headerlink" title="什么是Dubbo"></a>什么是Dubbo</h3><p>Dubbo是阿里巴巴公司开源的一个高性能、轻量级的 Java RPC 框架</p>
+<p>致力于提供高性能和透明化的 RPC 远程服务调用方案，以及 SOA 服务治理方案。</p>
+<h3 id="Dubbo的发展历史"><a href="#Dubbo的发展历史" class="headerlink" title="Dubbo的发展历史"></a>Dubbo的发展历史</h3><p><strong>2011&#x2F;10&#x2F;27：</strong> 阿里巴巴巴宣布 Dubbo 开源。</p>
+<p><strong>2012&#x2F;10&#x2F;23：</strong> 发布最后一个版本 2.5.3 并停止维护更新。</p>
+<p><strong>2017&#x2F;07&#x2F;31：</strong> 起死回生，官方宣布开启重新更新，并会得到重点维护.</p>
+<p><strong>2017&#x2F;09&#x2F;07：</strong> 发布起死回生的第一个版本：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/DEG-i3Y5u4dajS05gmJboA">dubbo-2.5.4</a>。</p>
+<p><strong>2018&#x2F;01&#x2F;08：</strong></p>
+<p>1、Dubbo 团队透露 Dubbo 3.0 宣布正式开工</p>
+<p>2、发布了 dubbo-2.6.0 版本，主要合并了由当当网开源的 dubbox 项目分支。PS：dubbo停止维护期间，当当网基于 dubbo 开源了dubbox。</p>
+<p><strong>2018&#x2F;01&#x2F;22：</strong> Dubbo Spring Boot 版正式发布：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/yCcIMcn1MfwItycsPFgfOA">dubbo-spring-boot-starter</a> v1.0.0 公测版。</p>
+<p><strong>2018&#x2F;02&#x2F;09：</strong> Dubbo 通过投票正式进入 Apache 基金会孵化器，更新了 Apache 官方域名，也不再仅限于 Java 语言。</p>
+<p><strong>2019&#x2F;05&#x2F;20：</strong> Apache 软件基金会宣布 Dubbo 正式毕业，成为 Apache 的顶级项目。</p>
+<p>2021&#x2F;7月1日 : Dubbo 3.0版本正式发布</p>
+<h3 id="Dubbo主要特性"><a href="#Dubbo主要特性" class="headerlink" title="Dubbo主要特性"></a>Dubbo主要特性</h3><ul>
+<li><strong>面向接口代理的高性能RPC调用</strong>：提供高性能的基于代理的远程调用能力，服务以接口为粒度，屏蔽了远程调用底层细节。</li>
+<li><strong>智能负载均衡</strong>：内置多种负载均衡策略，智能感知下游节点健康状况，显著减少调用延迟，提高系统吞吐量。（不太优秀，可以使用其他的组件）</li>
+<li><strong>服务自动注册与发现</strong>：支持多种注册中心服务，服务实例上下线实时感知。（<strong>Dubbo+Zookeeper</strong>&#x2F;nacos&#x2F;eurake）</li>
+<li><strong>高度可扩展能力</strong>：遵循微内核+插件的设计原则，所有核心能力如Protocol、Transport、Serialization被设计为扩展点，平等对待内置实现和第三方实现。</li>
+<li><strong>运行期流量调度</strong>：内置条件、脚本等路由策略，通过配置不同的路由规则，轻松实现灰度发布，同机房优先等功能。</li>
+<li><strong>可视化的服务治理与运维</strong>：提供丰富服务治理、运维工具：随时查询服务元数据、服务健康状态及调用统计，实时下发路由策略、调整配置参数。</li>
+</ul>
+<p><strong>Dubbo的工作原理：</strong></p>
+<p><img src="/2023/03/01/Dubbo/image-20230302221958031.png" alt="image-20230302221958031"></p>
+<p><strong>注册中心是基于长链接推送到消费者，eurake是短连接TCP</strong></p>
+<p>短连接每一次链接时都要创建一次连接，消耗性能。</p>
+<h3 id="Dubbo的基本使用"><a href="#Dubbo的基本使用" class="headerlink" title="Dubbo的基本使用"></a>Dubbo的基本使用</h3><h4 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h4><p><strong>添加依赖</strong></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.dubbo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>dubbo<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.7.8<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>配置文件</strong></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:dubbo</span>=<span class="string">&quot;http://code.alibabatech.com/schema/dubbo&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="string"><span class="tag">		http://www.springframework.org/schema/beans/spring-beans-4.2.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://code.alibabatech.com/schema/dubbo</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://code.alibabatech.com/schema/dubbo/dubbo.xsd&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--dubbo全局的服务名--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:application</span> <span class="attr">name</span>=<span class="string">&quot;dubbo-server&quot;</span> /&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--注册中心--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:registry</span> <span class="attr">address</span>=<span class="string">&quot;N/A&quot;</span> <span class="attr">timeout</span>=<span class="string">&quot;10000&quot;</span> <span class="attr">check</span>=<span class="string">&quot;false&quot;</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--下面是nocas的注册中心，如果是zookeeper的，就换成zookeeper://....--&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--&lt;dubbo:registry address=&quot;nacos://localhost:8848&quot;  timeout=&quot;10000&quot;/&gt;--&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 服务名称 及 端口号--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:protocol</span> <span class="attr">name</span>=<span class="string">&quot;dubbo&quot;</span> <span class="attr">port</span>=<span class="string">&quot;20880&quot;</span> /&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--需要发布的服务--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:service</span> <span class="attr">interface</span>=<span class="string">&quot;com.example.dubbo.server.IloginService&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;loginService&quot;</span> /&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--dubbo的实现--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;loginService&quot;</span>  <span class="attr">class</span>=<span class="string">&quot;com.example.dubbo.server.IloginServiceImpl&quot;</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>响应</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IloginServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">IloginService</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">login</span><span class="params">(String username, String password)</span> &#123;</span><br><span class="line">        <span class="comment">//实现业务逻辑</span></span><br><span class="line">        <span class="keyword">if</span> (username.equals(<span class="string">&quot;admin&quot;</span>)&amp;password.equals(<span class="string">&quot;admin&quot;</span>))&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;SUCCESS&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;FAILED&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h4><p><strong>配置文件</strong></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:dubbo</span>=<span class="string">&quot;http://code.alibabatech.com/schema/dubbo&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="string"><span class="tag">		http://www.springframework.org/schema/beans/spring-beans-4.2.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://code.alibabatech.com/schema/dubbo</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://code.alibabatech.com/schema/dubbo/dubbo.xsd&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--dubbo名称--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:application</span> <span class="attr">name</span>=<span class="string">&quot;dubbo-client&quot;</span> /&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--注册中心--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:registry</span> <span class="attr">address</span>=<span class="string">&quot;nacos://localhost:8848&quot;</span> <span class="attr">timeout</span>=<span class="string">&quot;10000&quot;</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--服务地址--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:reference</span> <span class="attr">id</span>=<span class="string">&quot;loginService&quot;</span> <span class="attr">interface</span>=<span class="string">&quot;com.example.dubbo.server.IloginService&quot;</span></span></span><br><span class="line"><span class="tag">                     <span class="attr">url</span>=<span class="string">&quot;dubbo://192.168.31.170:20880/com.example.dubbo.server.IloginService&quot;</span> /&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>请求</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">( String[] args )</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">IloginService</span> <span class="variable">iloginService</span> <span class="operator">=</span><span class="literal">null</span>;</span><br><span class="line">        <span class="type">ApplicationContext</span> <span class="variable">ac</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;classpath:/META-INF/spring/application.xml&quot;</span>);</span><br><span class="line">        iloginService = ac.getBean(IloginService.class);</span><br><span class="line">        System.out.println(iloginService.login(<span class="string">&quot;admin&quot;</span>,<span class="string">&quot;admin&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Dubbo支持的注册中心"><a href="#Dubbo支持的注册中心" class="headerlink" title="Dubbo支持的注册中心"></a>Dubbo支持的注册中心</h3><p>consul、zk、Eureka、Redis、ectd、nacos、Dubbo、Spring  Cloud</p>
+<h4 id="Dubbo-vs-Spring-Cloud"><a href="#Dubbo-vs-Spring-Cloud" class="headerlink" title="Dubbo vs Spring Cloud"></a>Dubbo vs Spring Cloud</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>Dubbo</th>
+<th>Spring   Cloud</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>服务注册中心</td>
+<td>Zookeeper</td>
+<td>Spring Cloud Netfix Eureka</td>
+</tr>
+<tr>
+<td>服务调用方式</td>
+<td>RPC</td>
+<td>REST API</td>
+</tr>
+<tr>
+<td>服务监控</td>
+<td>Dubbo-monitor</td>
+<td>Spring Boot Admin</td>
+</tr>
+<tr>
+<td>熔断器</td>
+<td>不完善</td>
+<td>Spring Cloud Netflix Hystrix</td>
+</tr>
+<tr>
+<td>服务网关</td>
+<td>无</td>
+<td>Spring Cloud Netflix Zuul</td>
+</tr>
+<tr>
+<td>分布式配置</td>
+<td>无</td>
+<td>Spring Cloud Config</td>
+</tr>
+<tr>
+<td>服务跟踪</td>
+<td>无</td>
+<td>Spring Cloud Sleuth</td>
+</tr>
+<tr>
+<td>数据流</td>
+<td>无</td>
+<td>Spring Cloud Stream</td>
+</tr>
+<tr>
+<td>批量任务</td>
+<td>无</td>
+<td>Spring Cloud Task</td>
+</tr>
+<tr>
+<td>信息总线</td>
+<td>无</td>
+<td>Spring Cloud Bus</td>
+</tr>
+</tbody></table>
+<p><strong>Dubbo主要做的是服务治理，可以通过整合其他组件来满足需求</strong></p>
+<p>并在之后和Spring Cloud整合为<strong>Dubbo Spring Cloud</strong></p>
+<table>
+<thead>
+<tr>
+<th>功能组件</th>
+<th>Spring Cloud</th>
+<th>Dubbo Spring Cloud</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>分布式配置（Distributed configuration）</td>
+<td>Git、Zookeeper、Consul、JDBC</td>
+<td>Spring Cloud 分布式配置 + Dubbo 配置中心</td>
+</tr>
+<tr>
+<td>服务注册与发现（Service registration and discovery）</td>
+<td>Eureka、Zookeeper、Consul</td>
+<td>Spring Cloud 原生注册中心 + Dubbo 原生注册中心</td>
+</tr>
+<tr>
+<td>负载均衡（Load balancing）</td>
+<td>Ribbon（随机、轮询等算法）</td>
+<td>Dubbo 内建实现（随机、轮询等算法 + 权重等特性）</td>
+</tr>
+<tr>
+<td>服务熔断（Circuit Breakers）</td>
+<td>Spring Cloud Hystrix</td>
+<td>Spring Cloud Hystrix + Alibaba Sentinel 等</td>
+</tr>
+<tr>
+<td>服务调用（Service-to-service calls）</td>
+<td>Open Feign、RestTemplate</td>
+<td>Spring Cloud 服务调用 + Dubbo @Reference</td>
+</tr>
+<tr>
+<td>链路跟踪（Tracing）</td>
+<td>Spring Cloud Sleuth + Zipkin</td>
+<td>Zipkin、opentracing 等</td>
+</tr>
+</tbody></table>
+<p>以上对比表格摘自Dubbo Spring Cloud官方文档。本质上   都是为业务而生</p>
+<h3 id="Dubbo-Spring-Cloud的基本使用"><a href="#Dubbo-Spring-Cloud的基本使用" class="headerlink" title="Dubbo Spring Cloud的基本使用"></a>Dubbo Spring Cloud的基本使用</h3><h4 id="nocas"><a href="#nocas" class="headerlink" title="nocas"></a>nocas</h4><ol>
+<li><p>进入依赖</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-dubbo<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.7.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud&lt;/ groupId&gt;</span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.7.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置文件</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">#dubbo服务描基础包路路径</span><br><span class="line">dubbo.scan.base-packages=com.example.springcloud.dubbo.provider</span><br><span class="line"></span><br><span class="line">#端口号 -1（20880开始自增）</span><br><span class="line">dubbo.protocol.name=dubbo</span><br><span class="line">dubbo.protocol.port=20880</span><br><span class="line"></span><br><span class="line">#注册中心地址</span><br><span class="line">spring.cloud.nacos.discovery.server-addr=localhost:8848</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>引入服务</p>
+<p>在需要引入的服务上加注解</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.dubbo.config.annotation.Service;</span><br><span class="line"></span><br><span class="line"><span class="comment">//@Service中可以配置dubbo相关的业务,用于暴露服务的注解</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;UserDTO&gt; <span class="title function_">getUsers</span><span class="params">(InputParaDTO para)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;====provider invoke====&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableDiscoveryClient</span><span class="comment">//客户端自动注册</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DubboProviderApplication</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(DubboProviderApplication.class,args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="zookeeper"><a href="#zookeeper" class="headerlink" title="zookeeper"></a>zookeeper</h4><ol>
+<li><p>进入依赖</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.dubbo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>dubbo-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0.8<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.curator<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>curator-x-discovery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.2.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置文件</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">dubbo:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">dubbo-provider</span></span><br><span class="line">    <span class="attr">registry:</span></span><br><span class="line">      <span class="attr">address:</span> <span class="string">zookeeper://192.168.1.6:2181</span></span><br><span class="line">  <span class="attr">protocol:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">dubbo</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">20881</span></span><br><span class="line"></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8090</span></span><br><span class="line">  <span class="attr">servlet:</span></span><br><span class="line">    <span class="attr">context-path:</span> <span class="string">/dubbo-provider</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>引入服务</p>
+<p>在需要引入的服务上加注解</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.dubbo.config.annotation.DubboService;</span><br><span class="line"></span><br><span class="line"><span class="meta">@DubboService</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;UserDTO&gt; <span class="title function_">getUsers</span><span class="params">(InputParaDTO para)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;====provider invoke====&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableDubbo</span><span class="comment">//客户端自动注册</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DubboProviderApplication</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(DubboProviderApplication.class,args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>以上两种都可以实现基本功能</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://water001-maker.github.io">Xue_Water</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://water001-maker.github.io/2023/03/01/Dubbo/">https://water001-maker.github.io/2023/03/01/Dubbo/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://water001-maker.github.io" target="_blank">幻想家的秘密基地</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Dubbo/">Dubbo</a></div><div class="post_share"><div class="social-share" data-image="/img/cover9.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/02/27/%E8%BF%9B%E7%A8%8B%E4%B9%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E6%B3%95/" title="进程之间的通信方法"><img class="cover" src="/img/cover15.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">进程之间的通信方法</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Xue_Water</div><div class="author-info__description">学而不思则罔，思而不学则殆</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Water001-maker"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">一个努力学习的小白，会不定期将自己的学习笔记整理到这里，仅供大家学习和参考。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Dubbo%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">Dubbo基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Dubbo%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%BA%94%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">Dubbo的基本应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFDubbo"><span class="toc-number">1.1.1.</span> <span class="toc-text">什么是Dubbo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dubbo%E7%9A%84%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2"><span class="toc-number">1.1.2.</span> <span class="toc-text">Dubbo的发展历史</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dubbo%E4%B8%BB%E8%A6%81%E7%89%B9%E6%80%A7"><span class="toc-number">1.1.3.</span> <span class="toc-text">Dubbo主要特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dubbo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">1.1.4.</span> <span class="toc-text">Dubbo的基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="toc-number">1.1.4.1.</span> <span class="toc-text">服务端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">1.1.4.2.</span> <span class="toc-text">客户端</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dubbo%E6%94%AF%E6%8C%81%E7%9A%84%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="toc-number">1.1.5.</span> <span class="toc-text">Dubbo支持的注册中心</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Dubbo-vs-Spring-Cloud"><span class="toc-number">1.1.5.1.</span> <span class="toc-text">Dubbo vs Spring Cloud</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dubbo-Spring-Cloud%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">1.1.6.</span> <span class="toc-text">Dubbo Spring Cloud的基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#nocas"><span class="toc-number">1.1.6.1.</span> <span class="toc-text">nocas</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#zookeeper"><span class="toc-number">1.1.6.2.</span> <span class="toc-text">zookeeper</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/03/01/Dubbo/" title="Dubbo学习笔记"><img src="/img/cover9.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Dubbo学习笔记"/></a><div class="content"><a class="title" href="/2023/03/01/Dubbo/" title="Dubbo学习笔记">Dubbo学习笔记</a><time datetime="2023-02-28T16:00:00.000Z" title="发表于 2023-03-01 00:00:00">2023-03-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/27/%E8%BF%9B%E7%A8%8B%E4%B9%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E6%B3%95/" title="进程之间的通信方法"><img src="/img/cover15.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="进程之间的通信方法"/></a><div class="content"><a class="title" href="/2023/02/27/%E8%BF%9B%E7%A8%8B%E4%B9%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E6%B3%95/" title="进程之间的通信方法">进程之间的通信方法</a><time datetime="2023-02-26T16:00:00.000Z" title="发表于 2023-02-27 00:00:00">2023-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/26/Lambda&amp;Stream/" title="Lambda&amp;Stream"><img src="/img/cover6.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Lambda&amp;Stream"/></a><div class="content"><a class="title" href="/2023/02/26/Lambda&amp;Stream/" title="Lambda&amp;Stream">Lambda&amp;Stream</a><time datetime="2023-02-25T16:00:00.000Z" title="发表于 2023-02-26 00:00:00">2023-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/23/MQ%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" title="MQ常见问题"><img src="/img/cover15.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MQ常见问题"/></a><div class="content"><a class="title" href="/2023/02/23/MQ%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" title="MQ常见问题">MQ常见问题</a><time datetime="2023-02-22T16:00:00.000Z" title="发表于 2023-02-23 00:00:00">2023-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/21/ZGC/" title="ZGC"><img src="/img/cover12.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ZGC"/></a><div class="content"><a class="title" href="/2023/02/21/ZGC/" title="ZGC">ZGC</a><time datetime="2023-02-20T16:00:00.000Z" title="发表于 2023-02-21 00:00:00">2023-02-21</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/cover9.png')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Xue_Water</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://water001-maker.github.io/2023/03/01/Dubbo/'
+    this.page.identifier = '/2023/03/01/Dubbo/'
+    this.page.title = 'Dubbo学习笔记'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+
+  document.getElementById('darkmode').addEventListener('click', () => {
+    setTimeout(() => window.disqusReset(), 200)
+  })
+}
+
+if ('Valine' === 'Disqus' || !false) {
+  if (false) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="true" data-text="JVM,JDK,JRE,Mysql,Redis,Spring,MQ,ES,Oracle,Jva" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,515 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>HTTP的发展 | 幻想家的秘密基地</title><meta name="author" content="Xue_Water"><meta name="copyright" content="Xue_Water"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="HTTP1.1HTTP1.1的特点HTTP最突出的特点就是简单、灵活和易于扩展、应用广泛和跨平台  简单   HTTP 基本的报文格式就是 header + body，头部信息也是 key-value 简单文本的形式，易于理解，降低了学习和使用的门槛   灵活和易于扩展   HTTP协议里的各类请求方法、URI&#x2F;URL、状态码、头字段等每个组成要求都没有被固定死，都允许开发人员自定义和扩">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP的发展">
+<meta property="og:url" content="https://water001-maker.github.io/2023/02/18/HTTP%E6%BC%94%E5%8F%98/index.html">
+<meta property="og:site_name" content="幻想家的秘密基地">
+<meta property="og:description" content="HTTP1.1HTTP1.1的特点HTTP最突出的特点就是简单、灵活和易于扩展、应用广泛和跨平台  简单   HTTP 基本的报文格式就是 header + body，头部信息也是 key-value 简单文本的形式，易于理解，降低了学习和使用的门槛   灵活和易于扩展   HTTP协议里的各类请求方法、URI&#x2F;URL、状态码、头字段等每个组成要求都没有被固定死，都允许开发人员自定义和扩">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://water001-maker.github.io/img/cover9.png">
+<meta property="article:published_time" content="2023-02-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-02-26T15:47:28.614Z">
+<meta property="article:author" content="Xue_Water">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://water001-maker.github.io/img/cover9.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://water001-maker.github.io/2023/02/18/HTTP%E6%BC%94%E5%8F%98/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'HTTP的发展',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-02-26 23:47:28'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = url => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      link.onload = () => resolve()
+      link.onerror = () => reject()
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover9.png')"><nav id="nav"><span id="blog-info"><a href="/" title="幻想家的秘密基地"><span class="site-name">幻想家的秘密基地</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">HTTP的发展</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-17T16:00:00.000Z" title="发表于 2023-02-18 00:00:00">2023-02-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-02-26T15:47:28.614Z" title="更新于 2023-02-26 23:47:28">2023-02-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">8.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>25分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="HTTP的发展"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="HTTP1-1"><a href="#HTTP1-1" class="headerlink" title="HTTP1.1"></a>HTTP1.1</h1><h2 id="HTTP1-1的特点"><a href="#HTTP1-1的特点" class="headerlink" title="HTTP1.1的特点"></a>HTTP1.1的特点</h2><p>HTTP最突出的特点就是<strong>简单、灵活和易于扩展、应用广泛和跨平台</strong></p>
+<ul>
+<li><p><strong>简单</strong></p>
+</li>
+<li><ul>
+<li>HTTP 基本的报文格式就是 header + body，头部信息也是 key-value 简单文本的形式，易于理解，降低了学习和使用的门槛</li>
+</ul>
+</li>
+<li><p><strong>灵活和易于扩展</strong></p>
+</li>
+<li><ul>
+<li>HTTP协议里的各类请求方法、URI&#x2F;URL、状态码、头字段等每个组成要求都没有被固定死，都允许开发人员自定义和扩充</li>
+<li>同时 <strong>HTTP 由于是工作在应用层</strong>（OSI 第七层），则它下层可以随意变化</li>
+<li><strong>HTTPS 也就是在 HTTP 与 TCP 层之间增加了 SSL&#x2F;TLS 安全传输层</strong>，HTTP&#x2F;3 甚至把 TCP 层换成了基于 UDP 的 QUIC</li>
+</ul>
+</li>
+<li><p><strong>应用广泛和跨平台</strong></p>
+</li>
+<li><ul>
+<li>互联网发展至今，HTTP 的应用范围非常的广泛，从台式机的浏览器到手机上的各种 APP，从看新闻、刷贴吧到购物、理财、吃鸡，HTTP 的应用片地开花，同时天然具有跨平台的优越性</li>
+</ul>
+</li>
+</ul>
+<h2 id="SSL-x2F-TLS"><a href="#SSL-x2F-TLS" class="headerlink" title="SSL&#x2F;TLS"></a>SSL&#x2F;TLS</h2><ul>
+<li>SSL 是”Secure Sockets Layer” 的缩写，中文叫做<strong>「安全套接层」</strong>。它是在上世纪 90 年代中期，由网景公司设计的。<strong>在 OSI 七层模型中处于会话层</strong>(第 5 层)。</li>
+<li>TLS 是 “Transport Layer Security”，中文叫做 <strong>「传输层安全协议」。</strong>因为到了1999年，SSL 因为应用广泛，已经成为互联网上的事实标准。IETF 就在那年把 SSL 标准化。<strong>SSL标准化之后的名称改为 TLS</strong>。</li>
+</ul>
+<p>很多相关的文章都把这两者并列称呼(SSL&#x2F;TLS)，因为这两者可以视作同一个东西的不同阶段。因为SSL在它发展到第三个大版本的时候才被标准化，成为 TLS，并被当做 TLS1.0 的版本，准确地说，<strong>TLS1.0 &#x3D; SSL3.1</strong></p>
+<h2 id="HTTP1-1的缺点"><a href="#HTTP1-1的缺点" class="headerlink" title="HTTP1.1的缺点"></a>HTTP1.1的缺点</h2><p>HTTP 协议里有优缺点一体的双刃剑，分别是<strong>无状态、明文传输</strong>，同时还有一大缺点不安全</p>
+<ul>
+<li><p><strong>无状态</strong></p>
+<ul>
+<li><p>无状态的好处，因为服务器不会去记忆 HTTP 的状态，所以不需要额外的资源来记录状态信息，这能减轻服务器的负担，能够把更多的 CPU 和内存用来对外提供服务。</p>
+</li>
+<li><p>无状态的坏处，既然服务器没有记忆能力，它在完成有关联性的操作时会非常麻烦。</p>
+</li>
+<li><p>例如登录-&gt;添加购物车-&gt;下单-&gt;结算-&gt;支付，这系列操作都要知道用户的身份才行。但服务器不知道这些请求是有关联的，每次都要问一遍身份信息。</p>
+</li>
+<li><p>常见的解决方案就是使用Cookie，Cookie 通过在请求和响应报文中写入 Cookie 信息来控制客户端的状态。</p>
+</li>
+</ul>
+</li>
+<li><p>明文传输</p>
+<ul>
+<li><p>明文传输的数据可以直接通过浏览器的 F12 控制台或 Wireshark 抓包都可以直接肉眼查看，为我们调试工作带了极大的便利性。</p>
+</li>
+<li><p>不怀好意之人很容易获取到用户信息。</p>
+</li>
+<li><p>不安全。HTTP 比较严重的缺点就是不安全：</p>
+</li>
+<li><ul>
+<li>通信使用明文（不加密），内容可能会被窃听。比如，<strong>账号信息容易泄漏，那你号没了</strong></li>
+<li>不验证通信方的身份，因此有可能遭遇伪装。比如，<strong>访问假的淘宝、拼多多，那你钱没了</strong></li>
+<li>无法证明报文的完整性，所以有可能已遭篡改。比如，<strong>网页上植入垃圾广告，视觉污染，眼没了</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>HTTP 的安全问题，可以用 HTTPS 的方式解决，也就是通过引入 SSL&#x2F;TLS 层，使得在安全上达到了极致。</p>
+<h2 id="HTTP1-1的性能"><a href="#HTTP1-1的性能" class="headerlink" title="HTTP1.1的性能"></a>HTTP1.1的性能</h2><p>HTTP 协议是基于TCP&#x2F;IP，并且使用了「请求 - 应答」的通信模式，所以性能的关键就在这两点里</p>
+<ul>
+<li><p>长连接</p>
+<ul>
+<li>早期 HTTP&#x2F;1.0 性能上的一个很大的问题，那就是每发起一个请求，都要新建一次 TCP 连接（三次握手），而且是串行请求，做了无谓的 TCP 连接建立和断开，增加了通信开销。</li>
+<li>为了解决上述 TCP 连接问题，HTTP&#x2F;1.1 提出了长连接的通信方式，也叫持久连接(Connection: keep-alive)。这种方式的好处在于减少了 TCP 连接的重复建立和断开所造成的额外开销，减轻了服务器端的负载。</li>
+<li>持久连接的特点是，只要任意一端没有明确提出断开连接，则保持 TCP 连接状态</li>
+<li><strong>并发连接</strong> 对于一个域名允许分配多个长连接，那么相当于增加了任务队列，不至于一个队伍的任务阻塞其它所有任务。在RFC2616规定过客户端最多并发 2 个连接，不过事实上在现在的浏览器标准中，这个上限要多很多，Chrome 中是 6 个</li>
+<li><strong>域名分片</strong> 一个域名不是可以并发 6 个长连接吗？那我就多分几个域名，比如 content1.sanyuan.com 、content2.sanyuan.com。这样一个sanyuan.com域名下可以分出非常多的二级域名，而它们都指向同样的一台服务器，能够并发的长连接数更多了，<strong>事实上也更好地解决了队头阻塞的问题</strong></li>
+</ul>
+<p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/image-20230218120818795.png" alt="image-20230218120818795"></p>
+</li>
+<li><p>管道网络传输</p>
+</li>
+<li><ul>
+<li>HTTP&#x2F;1.1 采用了长连接的方式，这使得管道（pipeline）网络传输成为了可能。</li>
+<li>即可在同一个 TCP 连接里面，客户端可以发起多个请求，只要第一个请求发出去了，不必等其回来，就可以发第二个请求出去，可以减少整体的响应时间。</li>
+<li>举例：客户端需要请求两个资源。以前的做法是，在同一个TCP连接里面，先发送 A 请求，然后等待服务器做出回应，收到后再发出 B 请求。管道机制则是允许浏览器同时发出 A 请求和 B 请求</li>
+</ul>
+</li>
+<li><p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/image-20230218120833195.png" alt="image-20230218120833195"></p>
+</li>
+<li><p>但是服务器还是按照顺序，先回应 A 请求，完成后再回应 B 请求。要是 前面的回应特别慢，后面就会有许多请求排队等着。这称为<strong>队头堵塞</strong></p>
+</li>
+</ul>
+<p><strong>总之 HTTP&#x2F;1.1 的性能一般般，后续的 HTTP&#x2F;2 和 HTTP&#x2F;3 就是在优化 HTTP 的性能</strong></p>
+<h1 id="HTTP的演变"><a href="#HTTP的演变" class="headerlink" title="HTTP的演变"></a>HTTP的演变</h1><h2 id="HTTP1-1-1"><a href="#HTTP1-1-1" class="headerlink" title="HTTP1.1"></a>HTTP1.1</h2><ul>
+<li><p>HTTP1.1 相比 HTTP1.0 性能上的改进：</p>
+</li>
+<li><ul>
+<li>使用 <strong>TCP 长连接</strong>的方式改善了 HTTP&#x2F;1.0 短连接造成的性能开销。</li>
+<li>支持 <strong>管道（pipeline）网络传输</strong>，只要第一个请求发出去了，不必等其回来，就可以发第二个请求出去，可以减少整体的响应时间。</li>
+</ul>
+</li>
+<li><p>但 HTTP1.1 还是有性能瓶颈：</p>
+</li>
+<li><ul>
+<li><strong>请求&#x2F;响应头部（Header）未经压缩就发送</strong>，首部信息越多延迟越大。只能压缩 Body 的部分</li>
+<li><strong>发送冗长的首部</strong>。每次互相发送相同的首部造成的浪费较多</li>
+<li>服务器是按请求的顺序响应的，如果服务器响应慢，会招致客户端一直请求不到数据，也就是<strong>队头阻塞</strong>；</li>
+<li><strong>没有请求优先级控制</strong></li>
+<li><strong>请求只能从客户端开始</strong>，服务器只能被动响应</li>
+</ul>
+</li>
+</ul>
+<h2 id="HTTP2-0"><a href="#HTTP2-0" class="headerlink" title="HTTP2.0"></a>HTTP2.0</h2><p>HTTP2协议是基于HTTPS的，所以HTTP2的安全性也是有保障的。那HTTP2相比 HTTP1.1 性能上的改进：</p>
+<h4 id="头部压缩"><a href="#头部压缩" class="headerlink" title="头部压缩"></a>头部压缩</h4><p>HTTP2 会压缩头（Header）如果你同时发出多个请求，他们的头是一样的或是相似的，那么，协议会帮你消除重复的部分。这就是所谓的 HPACK 算法</p>
+<ul>
+<li>索引表</li>
+<li>霍夫曼编码</li>
+</ul>
+<p>在客户端和服务器同时维护一张头信息表，所有字段都会存入这个表，生成一个索引号，以后就<strong>不发送同样字段了，只发送索引号</strong>，这样就提高速度了。</p>
+<h4 id="二进制格式"><a href="#二进制格式" class="headerlink" title="二进制格式"></a>二进制格式</h4><p>HTTP2 不再像 HTTP1.1 里的纯文本形式的报文，而是<strong>全面采用了二进制格式</strong>，头信息和数据体都是二进制，并且统称为帧(frame)：头信息帧和数据帧。<img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640.jpeg" alt="图片">这样虽然对人不友好，但是对计算机非常友好，因为计算机只懂二进制，那么收到报文后，无需再将明文的报文转成二进制，而是直接解析二进制报文，这增加了数据传输的效率</p>
+<h4 id="数据流"><a href="#数据流" class="headerlink" title="数据流"></a>数据流</h4><p>HTTP2 的数据包不是按顺序发送的，同一个连接里面连续的数据包，可能属于不同的回应。因此，必须要对数据包做标记，指出它属于哪个回应。每个请求或回应的所有数据包，称为一个数据流（Stream）。每个数据流都标记着一个独一无二的编号，其中规定客户端发出的数据流编号为奇数， 服务器发出的数据流编号为偶数 客户端还可以指定数据流的优先级。优先级高的请求，服务器就先响应该请求。<img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640-16766987489421.jpeg" alt="图片"></p>
+<ul>
+<li>同域名下所有通信都在单个连接上完成，单个连接可以承载任意数量的双向数据流。</li>
+<li>数据流以消息的形式发送，而消息又由一个或多个帧组成，多个帧之间可以乱序发送，因为根据帧首部的流标识可以重新组装。</li>
+</ul>
+<p>这一特性，使性能有了极大提升：</p>
+<ul>
+<li><strong>同个域名只需要占用一个 TCP 连接</strong>，消除了因多个 TCP 连接而带来的延时和内存消耗。</li>
+<li>单个连接上可以并行交错的请求和响应，之间互不干扰。</li>
+<li>在HTTP2中，每个请求都可以带一个 <strong>31bit的优先值，0表示最高优先级</strong>， 数值越大优先级越低。有了这个优先值，客户端和服务器就可以在处理不同的流时采取不同的策略，以最优的方式发送流、消息和帧。</li>
+</ul>
+<h4 id="多路复用"><a href="#多路复用" class="headerlink" title="多路复用"></a>多路复用</h4><p>HTTP2 是可以在一个连接中并发多个请求或回应，而不用按照顺序一一对应。移除了 HTTP1.1 中的串行请求，不需要排队等待，也就不会再出现「队头阻塞」问题，降低了延迟，大幅度提高了连接的利用率。</p>
+<p>在一个 TCP 连接里，服务器收到了客户端 A 和 B 的两个请求，如果发现 A 处理过程非常耗时，于是就回应 A 请求已经处理好的部分，接着回应 B 请求，完成后，再回应 A 请求剩下的部分。</p>
+<p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640-16766987489712.jpeg" alt="图片"></p>
+<h4 id="服务器推送"><a href="#服务器推送" class="headerlink" title="服务器推送"></a>服务器推送</h4><p>HTTP2 还在一定程度上改善了传统的「请求 - 应答」工作模式，服务不再是被动地响应，也可以主动向客户端发送消息。举例来说，在浏览器刚请求 HTML 的时候，就提前把可能会用到的 JS、CSS 文件等静态资源主动发给客户端，减少延时的等待，也就是服务器推送(Server Push，也叫 Cache Push)</p>
+<h2 id="HTTP3-0"><a href="#HTTP3-0" class="headerlink" title="HTTP3.0"></a>HTTP3.0</h2><p>HTTP2 主要的问题在于，多个 HTTP 请求在复用一个 TCP 连接，下层的 TCP 协议是不知道有多少个 HTTP 请求的。所以一旦发生了丢包现象，就会触发 TCP 的重传机制，这样在一个 TCP 连接中的所有的 HTTP 请求都必须等待这个丢了的包被重传回来。</p>
+<ul>
+<li>HTTP1.1 中的管道(pipeline) 传输中如果有一个请求阻塞了，那么队列后请求也统统被阻塞住了</li>
+<li>HTTP2 多请求复用一个TCP连接，一旦发生丢包，就会阻塞住所有的 HTTP 请求。</li>
+</ul>
+<p>这都是基于 TCP 传输层的问题，所以 <strong>HTTP3 把 HTTP 下层的 TCP 协议改成了 UDP</strong>！UDP 发生是不管顺序，也不管丢包的，所以不会出现 HTTP1.1 的队头阻塞 和 HTTP2 的一个丢包全部重传问题。</p>
+<p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640-16766997610206.png" alt="图片"></p>
+<p>大家都知道 UDP 是不可靠传输的，但基于 UDP 的 QUIC 协议 可以实现类似 TCP 的可靠性传输。</p>
+<ul>
+<li>QUIC 有自己的一套机制可以保证传输的可靠性的。当某个流发生丢包时，只会阻塞这个流，其他流不会受到影响。</li>
+<li>TL3 升级成了最新的1.3版本，头部压缩算法也升级成了 QPack。</li>
+<li>HTTPS 要建立一个连接，要花费 6 次交互，先是建立三次握手，然后是 TLS&#x2F;1.3 的三次握手。QUIC 直接把以往的 TCP 和 TLS&#x2F;1.3 的 6 次交互 <strong>合并成了 3 次，减少了交互次数</strong></li>
+</ul>
+<p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640-16766997610217.png" alt="图片">所以， QUIC 是一个在 UDP 之上的伪 TCP + TLS + HTTP2 的多路复用的协议。QUIC 是新协议，对于很多网络设备，根本不知道什么是 QUIC，只会当做 UDP，这样会出现新的问题。所以 HTTP3 现在普及的进度非常的缓慢，不知道未来 UDP 是否能够逆袭 TCP。</p>
+<h1 id="HTTP和HTTPS"><a href="#HTTP和HTTPS" class="headerlink" title="HTTP和HTTPS"></a>HTTP和HTTPS</h1><h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><ul>
+<li>HTTP 是超文本传输协议，信息是明文传输，存在安全风险的问题。HTTPS 则解决 HTTP 不安全的缺陷，在 TCP 和 HTTP 网络层之间加入了 SSL&#x2F;TLS 安全协议，使得报文能够加密传输。</li>
+<li>HTTP 连接建立相对简单， TCP 三次握手之后便可进行 HTTP 的报文传输。而 HTTPS 在 TCP 三次握手之后，还需进行SSL&#x2F;TLS 的握手过程，才可进入加密报文传输。</li>
+<li>HTTP 的端口号是 80，HTTPS 的端口号是 443。</li>
+<li>HTTPS 协议需要向 CA（证书权威机构）申请数字证书，来保证服务器的身份是可信的</li>
+</ul>
+<p>+++</p>
+<p>HTTP 由于是明文传输，所以安全上存在以下三个风险：</p>
+<ul>
+<li><strong>窃听风险</strong>，比如通信链路上可以获取通信内容，用户号容易没。</li>
+<li><strong>篡改风险</strong>，比如强制入垃圾广告，视觉污染，用户眼容易瞎。</li>
+<li><strong>冒充风险</strong>，比如冒充淘宝网站，用户钱容易没。</li>
+</ul>
+<p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640-167670078455110.jpeg" alt="图片">HTTPS 在 HTTP 与 TCP 层之间加入了 SSL&#x2F;TLS 协议，可以很好的解决了上述的风险：</p>
+<ul>
+<li><strong>信息加密</strong>：交互信息无法被窃取</li>
+<li><strong>校验机制</strong>：无法篡改通信内容，篡改了就不能正常显示</li>
+<li><strong>身份证书</strong>：证明淘宝是真的淘宝网</li>
+</ul>
+<p>可见，只要自身不做「恶」，SSL&#x2F;TLS 协议是能保证通信是安全的</p>
+<h2 id="HTTPS安全的原因"><a href="#HTTPS安全的原因" class="headerlink" title="HTTPS安全的原因"></a>HTTPS安全的原因</h2><ul>
+<li>混合加密的方式实现信息的机密性，解决了窃听的风险。</li>
+<li>摘要算法的方式来实现完整性，它能够为数据生成独一无二的「指纹」，指纹用于校验数据的完整性，解决了篡改的风险。</li>
+<li>将服务器公钥放入到数字证书中，解决了冒充的风险</li>
+</ul>
+<h3 id="混合加密"><a href="#混合加密" class="headerlink" title="混合加密"></a>混合加密</h3><p>混合加密 HTTPS 采用的是对称加密和非对称加密结合的「混合加密」方式：</p>
+<ul>
+<li><strong>在通信建立前</strong>采用<strong>非对称加密</strong>的方式交换「会话秘钥」，后续就不再使用非对称加密。</li>
+<li><strong>在通信过程中</strong>全部使用<strong>对称加密</strong>的「会话秘钥」的方式加密明文数据。</li>
+</ul>
+<p>采用「混合加密」的方式的原因：</p>
+<ul>
+<li>对称加密只使用一个密钥，运算速度快，密钥必须保密，无法做到安全的密钥交换。</li>
+<li>非对称加密使用两个密钥：公钥和私钥，公钥可以任意分发而私钥保密，解决了密钥交换问题但速度慢。</li>
+</ul>
+<h3 id="摘要算法"><a href="#摘要算法" class="headerlink" title="摘要算法"></a>摘要算法</h3><p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/image-20230218142446558.png" alt="image-20230218142446558"></p>
+<p>客户端在发送明文之前会通过摘要算法算出明文的「指纹」，发送的时候把「指纹 + 明文」一同 加密成密文后，发送给服务器，服务器解密后，用相同的摘要算法算出发送过来的明文，通过比较客户端携带的「指纹」和当前算出的「指纹」做比较，若「指纹」相同，说明数据是完整的。</p>
+<h3 id="证书"><a href="#证书" class="headerlink" title="证书"></a>证书</h3><p>客户端先向服务器端索要公钥，然后用公钥加密信息，服务器收到密文后，用自己的私钥解密。这就存在些问题，如何保证公钥不被篡改和信任度？所以这里就需要借助第三方权威机构 CA（数字证书认证机构），将服务器公钥放在数字证书（由数字证书认证机构颁发）中，只要证书是可信的，公钥就是可信的。</p>
+<p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640-167670157346912.jpeg" alt="图片"></p>
+<p>通过数字证书的方式保证服务器公钥的身份，解决冒充的风险</p>
+<h2 id="HTTPS建立连接的过程"><a href="#HTTPS建立连接的过程" class="headerlink" title="HTTPS建立连接的过程"></a>HTTPS建立连接的过程</h2><p>SSL&#x2F;TLS 协议基本流程：</p>
+<ol>
+<li>TCP 三次同步握手</li>
+<li>客户端向服务器索要并验证服务器的公钥</li>
+<li>双方协商生产「会话秘钥」</li>
+<li>SSL 安全加密隧道协商完成</li>
+<li>双方采用「会话秘钥」进行加密通信。</li>
+</ol>
+<p>2，3步是 SSL&#x2F;TLS 的建立过程，也就是握手阶段 SSL&#x2F;TLS 的握手阶段涉及四次通信。</p>
+<p>可见下图：</p>
+<p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/image-20230218144511985.png" alt="image-20230218144511985"></p>
+<p>SSL&#x2F;TLS 协议建立的详细流程：</p>
+<h4 id="1-ClientHello"><a href="#1-ClientHello" class="headerlink" title="1. ClientHello"></a>1. ClientHello</h4><p>首先，由客户端向服务器发起加密通信请求，也就是 ClientHello 请求。在这一步，客户端主要向服务器发送以下信息：</p>
+<ol>
+<li><p>客户端支持的 SSL&#x2F;TLS 协议版本，如 TLS 1.2 版本。</p>
+</li>
+<li><p>客户端生产的<strong>随机数</strong>（Client Random），后面用于生产「会话秘钥」。</p>
+</li>
+<li><p>客户端支持的密码套件列表，如 RSA 加密算法。</p>
+</li>
+</ol>
+<h4 id="2-SeverHello"><a href="#2-SeverHello" class="headerlink" title="2. SeverHello"></a>2. SeverHello</h4><p>服务器收到客户端请求后，向客户端发出响应，也就是 SeverHello。服务器回应的内容有如下内容：</p>
+<ol>
+<li>确认 SSL&#x2F; TLS 协议版本，如果浏览器不支持，则关闭加密通信。</li>
+<li>服务器生产的<strong>随机数</strong>（Server Random），后面用于生产「会话秘钥」。</li>
+<li>确认的密码套件列表，如 RSA 加密算法。</li>
+<li>服务器的数字证书。</li>
+</ol>
+<h4 id="3-客户端回应"><a href="#3-客户端回应" class="headerlink" title="3. 客户端回应"></a>3. 客户端回应</h4><p>客户端收到服务器的回应之后，首先通过浏览器或者操作系统中的 CA 公钥，确认服务器的数字证书的真实性。如果证书没有问题，客户端会从数字证书中取出服务器的公钥，然后使用它加密报文，向服务器发送如下信息：</p>
+<ol>
+<li>一个<strong>随机数</strong>（pre-master key）。该随机数会被服务器公钥加密。</li>
+<li>加密通信算法改变通知，表示随后的信息都将用「会话秘钥」加密通信。</li>
+<li>客户端握手结束通知，表示客户端的握手阶段已经结束。这一项同时把之前所有内容的发生的数据做个摘要，用来供服务端校验。</li>
+</ol>
+<p>上面第一项的随机数是整个握手阶段的第三个随机数，这样服务器和客户端就同时有三个随机数，接着就用双方协商的加密算法，各自生成本次通信的「会话秘钥」</p>
+<h4 id="4-服务器的最后回应"><a href="#4-服务器的最后回应" class="headerlink" title="4. 服务器的最后回应"></a>4. 服务器的最后回应</h4><p>服务器收到客户端的第三个随机数（pre-master key）之后，通过协商的加密算法，计算出本次通信的「会话秘钥」。然后，向客户端发生最后的信息：</p>
+<ol>
+<li>加密通信算法改变通知，表示随后的信息都将用「会话秘钥」加密通信。</li>
+<li>服务器握手结束通知，表示服务器的握手阶段已经结束。这一项同时把之前所有内容的发生的数据做个摘要，用来供客户端校验。</li>
+</ol>
+<p>至此，整个 SSL&#x2F;TLS 的握手阶段全部结束。接下来，客户端与服务器进入加密通信，就完全是使用普通的 HTTP 协议，只不过用「会话秘钥」加密内容。</p>
+<h2 id="TLS的握手过程"><a href="#TLS的握手过程" class="headerlink" title="TLS的握手过程"></a>TLS的握手过程</h2><p>HTTPS 是应用层协议，需要先完成 TCP 连接建立，然后走 TLS 握手过程后，才能建立通信安全的连接。事实上，不同的密钥交换算法，TLS 的握手过程可能会有一些区别。这里先简单介绍下密钥交换算法，因为考虑到性能的问题，所以双方在加密应用信息时使用的是对称加密密钥，而对称加密密钥是不能被泄漏的，<strong>为了保证对称加密密钥的安全性，所以使用非对称加密的方式来保护对称加密密钥的协商</strong>，这个工作就是密钥交换算法负责的。</p>
+<p>&#x3D;&#x3D;<strong>以最简单的 RSA 密钥交换算法为例，来看看它的 TLS 握手过程。</strong>&#x3D;&#x3D;</p>
+<p>传统的 TLS 握手基本都是使用 RSA 算法来实现密钥交换的，在将 TLS 证书部署服务端时，证书文件中包含一对公私钥，其中公钥会在 TLS 握手阶段传递给客户端，私钥则一直留在服务端，一定要确保私钥不能被窃取。</p>
+<p>在 RSA 密钥协商算法中，客户端会生成随机密钥，并使用服务端的公钥加密后再传给服务端。根据非对称加密算法，公钥加密的消息仅能通过私钥解密，这样服务端解密后，双方就得到了相同的密钥，再用它加密应用消息。</p>
+<p>我用 Wireshark 工具抓了用 RSA 密钥交换的 TLS 握手过程，你可以从下面看到，一共经历来四次握手：</p>
+<p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/image-20230218145457262.png" alt="image-20230218145457262"></p>
+<h3 id="TLS-第一次握手"><a href="#TLS-第一次握手" class="headerlink" title="TLS 第一次握手"></a>TLS 第一次握手</h3><p>客户端首先会发一个「Client Hello」消息，字面意思我们也能理解到，这是跟服务器「打招呼」。</p>
+<p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640-167670335032414.png" alt="图片"></p>
+<p>消息里面有客户端使用的 TLS 版本号、支持的密码套件列表，以及生成的随机数（Client Random)，这个随机数会被服务端保留，它是生成对称加密密钥的材料之一</p>
+<h3 id="TLS-第二次握手"><a href="#TLS-第二次握手" class="headerlink" title="TLS 第二次握手"></a>TLS 第二次握手</h3><p>当服务端收到客户端的「Client Hello」消息后，会确认 TLS 版本号是否支持，和从密码套件列表中选择一个密码套件，以及生成随机数（Server Random）。接着，返回「Server Hello」消息，消息里面有服务器确认的 TLS 版本号，也给出了随机数（Server Random），然后从客户端的密码套件列表选择了一个合适的密码套件。</p>
+<p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640-167670335032515.png" alt="图片"></p>
+<p>可以看到，服务端选择的密码套件是: Cipher Suite: TLS_RSA_WITH_AES_128_GCM_SHA256 这个密码套件看起来真让人头晕，好一大串，但是其实它是有固定格式和规范的。基本的形式是: <strong>密钥交换算法</strong> + <strong>签名算法</strong> + <strong>对称加密算法</strong> +<strong>摘要算法</strong>  一般 WITH 单词前面有两个单词，第一个单词是约定密钥交换的算法，第二个单词是约定证书的验证算法。比如刚才的密码套件的意思就是：</p>
+<ul>
+<li>由于 WITH 单词只有一个 RSA，则说明握手时密钥交换算法和签名算法都是使用 RSA；</li>
+<li>握手后的通信使用 AES 对称算法，密钥长度 128 位，分组模式是 GCM；</li>
+<li>摘要算法 SHA256 用于消息认证和产生随机数；</li>
+</ul>
+<p>就前面这两个客户端和服务端相互「打招呼」的过程，客户端和服务端就已确认了 TLS 版本和使用的密码套件，而且你可能发现客户端和服务端都会各自生成一个随机数，并且还会把随机数传递给对方。那这个随机数有啥用呢？其实这两个随机数是后续作为生成「会话密钥」的条件，所谓的会话密钥就是数据传输时，所使用的对称加密密钥。然后，服务端为了证明自己的身份，会发送「Server Certificate」给客户端，这个消息里含有数字证书。</p>
+<p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640-167670335032516.png" alt="图片"></p>
+<p>随后，服务端发了「Server Hello Done」消息，目的是告诉客户端，我已经把该给你的东西都给你了，本次打招呼完毕</p>
+<p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640-167670335032517.png" alt="图片"></p>
+<h3 id="TLS-第三次握手"><a href="#TLS-第三次握手" class="headerlink" title="TLS 第三次握手"></a>TLS 第三次握手</h3><p>服务端收到后，用 RSA 私钥解密，得到客户端发来的随机数 (pre-master)。至此，客户端和服务端双方都共享了三个随机数，分别是 Client Random、Server Random、pre-master。于是，双方根据已经得到的三个随机数，生成会话密钥（Master Secret），它是对称密钥，用于对后续的 HTTP 请求&#x2F;响应的数据加解密。生成完会话密钥后，然后客户端发一个「Change Cipher Spec」，告诉服务端开始使用加密方式发送消息。</p>
+<p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640-167670364199422.png" alt="图片"></p>
+<p>然后，客户端再发一个「Encrypted Handshake Message（Finishd）」消息，把之前所有发送的数据做个摘要，再用会话密钥（master secret）加密一下，让服务器做个验证，验证加密通信是否可用和之前握手信息是否有被中途篡改过。</p>
+<p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640-167670364199523.png" alt="图片"></p>
+<p>可以发现，「Change Cipher Spec」之前传输的 TLS 握手数据都是明文，之后都是对称密钥加密的密文。</p>
+<h3 id="TLS-第四次握手"><a href="#TLS-第四次握手" class="headerlink" title="TLS 第四次握手"></a>TLS 第四次握手</h3><p>服务器也是同样的操作，发「Change Cipher Spec」和「Encrypted Handshake Message」消息，如果双方都验证加密和解密没问题，那么握手正式完成。最后，就用「会话密钥」加解密 HTTP 请求和响应了。</p>
+<h3 id="为什么是四次"><a href="#为什么是四次" class="headerlink" title="为什么是四次"></a>为什么是四次</h3><p>SSL&#x2F;TLS 1.2 需要 4 握手，需要 2 个 RTT 的时延，我文中的图是把每个交互分开画了，实际上把他们合在一起发送，就是 4 次握手：</p>
+<p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640-167670373326126.png" alt="图片"></p>
+<p>另外，SSL&#x2F;TLS 1.3 优化了过程，只需要 1 个 RTT 往返时延，也就是只需要 3 次握手：</p>
+<p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640-167670373326127.png" alt="图片"></p>
+<h2 id="TLS-1-3-做了哪些改进？"><a href="#TLS-1-3-做了哪些改进？" class="headerlink" title="TLS 1.3 做了哪些改进？"></a>TLS 1.3 做了哪些改进？</h2><p>TLS 1.2 虽然存在了 10 多年，经历了无数的考验，但历史的车轮总是不断向前的，为了获得更强的安全、更优秀的性能，在 2018年 就推出了 TLS1.3，对于 TLS1.2 做了一系列的改进，主要分为这几个部分: <strong>强化安全、提高性能</strong></p>
+<h3 id="强化安全"><a href="#强化安全" class="headerlink" title="强化安全"></a>强化安全</h3><p>在 TLS1.3 中废除了非常多的加密算法，最后只保留五个加密套件:</p>
+<ul>
+<li>TLS_AES_128_GCM_SHA256</li>
+<li>TLS_AES_256_GCM_SHA384</li>
+<li>TLS_CHACHA20_POLY1305_SHA256</li>
+<li>TLS_AES_128_GCM_SHA256</li>
+<li>TLS_AES_128_GCM_8_SHA256</li>
+</ul>
+<p>可以看到，最后剩下的</p>
+<ul>
+<li>对称加密算法只有 <strong>AES</strong> 和 <strong>CHACHA20</strong>，之前主流的也会这两种</li>
+<li>分组模式也只剩下 <strong>GCM</strong> 和 <strong>POLY1305</strong>,</li>
+<li>哈希摘要算法只剩下了 <strong>SHA256</strong> 和 <strong>SHA384</strong> 了</li>
+</ul>
+<p>那你可能会问了, 之前RSA这么重要的非对称加密算法怎么不在了？我觉得有两方面的原因:</p>
+<ul>
+<li><p>2015年发现了FREAK攻击，即已经有人发现了 RSA 的漏洞，能够进行破解了。为什么？</p>
+</li>
+<li><p>一旦私钥泄露，那么中间人可以通过私钥计算出之前所有报文的secret，破解之前所有的密文。</p>
+</li>
+<li><ul>
+<li>回到 RSA 握手的过程中，客户端拿到服务器的证书后，提取出服务器的公钥，然后生成 pre_random 并用<strong>公钥</strong>加密传给服务器，服务器通过<strong>私钥</strong>解密，从而拿到真实的 pre_random。当中间人拿到了服务器私钥，并且截获之前所有报文的时候，那么就能拿到pre_random、server_random和client_random并根据对应的随机数函数生成secret，也就是拿到了 TLS 最终的会话密钥，每一个历史报文都能通过这样的方式进行破解。</li>
+<li>但ECDHE在每次握手时都会生成临时的密钥对，即使私钥被破解，之前的历史消息并不会收到影响。这种一次破解并不影响历史信息的性质也叫<strong>前向安全性</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><strong>RSA 算法不具备前向安全性，而 ECDHE 具备，因此在 TLS1.3 中彻底取代了RSA</strong>。</p>
+<h3 id="提升性能"><a href="#提升性能" class="headerlink" title="提升性能"></a>提升性能</h3><h4 id="握手改进"><a href="#握手改进" class="headerlink" title="握手改进"></a>握手改进</h4><p><img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640-167670373326128.png" alt="图片"></p>
+<p>大体的方式和 TLS1.2 差不多，不过和 TLS 1.2 相比少了一个 RTT， 服务端不必等待对方验证证书之后才拿到client_params，而是直接在第一次握手的时候就能够拿到, 拿到之后立即计算secret，节省了之前不必要的等待时间。同时，这也意味着在第一次握手的时候客户端需要传送更多的信息，一口气给传完。这种 TLS 1.3 握手方式也被叫做 <strong>1-RTT握手</strong>。但其实这种1-RTT的握手方式还是有一些优化的空间的。</p>
+<h4 id="会话复用"><a href="#会话复用" class="headerlink" title="会话复用"></a>会话复用</h4><p>会话复用有两种方式: <strong>Session ID 和 Session Ticket。先说说最早出现的Seesion ID</strong>，具体做法是客户端和服务器首次连接后各自保存会话的 ID，并存储会话密钥，当再次连接时，客户端发送ID过来，服务器查找这个 ID 是否存在，如果找到了就直接复用之前的会话状态，会话密钥不用重新生成，直接用原来的那份。</p>
+<p>但这种方式也存在一个弊端，就是当客户端数量庞大的时候，对服务端的存储压力非常大。</p>
+<p>因而出现了第二种方式——<strong>Session Ticket</strong>。它的思路就是: 服务端的压力大，那就把压力分摊给客户端呗。具体来说，双方连接成功后，服务器加密会话信息，用<strong>Session Ticket</strong>消息发给客户端，让客户端保存下来。下次重连的时候，就把这个 Ticket 进行解密，验证它过没过期，如果没过期那就直接恢复之前的会话状态。这种方式虽然减小了服务端的存储压力，但与带来了安全问题，即每次用一个固定的密钥来解密 Ticket 数据，一旦黑客拿到这个密钥，之前所有的历史记录也被破解了。因此为了尽量避免这样的问题，密钥需要定期进行更换。总的来说，这些会话复用的技术在保证1-RTT的同时，也节省了生成会话密钥这些算法所消耗的时间，是一笔可观的性能提升。</p>
+<h4 id="PSK"><a href="#PSK" class="headerlink" title="PSK"></a>PSK</h4><p>刚刚说的都是1-RTT情况下的优化，那能不能优化到0-RTT呢？答案是可以的。做法其实也很简单，在发送<strong>Session Ticket</strong>的同时带上应用数据，不用等到服务端确认，这种方式被称为 Pre-Shared Key，即 PSK。</p>
+<p>这种方式虽然方便，但也带来了安全问题。中间人截获PSK的数据，不断向服务器重复发，类似于 TCP 第一次握手携带数据，增加了服务器被攻击的风险。</p>
+<p>TLS1.3 在 TLS1.2 的基础上废除了大量的算法，提升了安全性。同时利用会话复用节省了重新生成密钥的时间，利用 PSK 做到了0-RTT连接。</p>
+<h2 id="RSA-算法的缺陷"><a href="#RSA-算法的缺陷" class="headerlink" title="RSA 算法的缺陷"></a>RSA 算法的缺陷</h2><p><strong>使用 RSA 密钥协商算法的最大问题是不支持前向保密</strong>。因为客户端传递随机数（用于生成对称加密密钥的条件之一）给服务端时使用的是公钥加密的，服务端收到到后，会用私钥解密得到随机数。所以一旦服务端的私钥泄漏了，过去被第三方截获的所有 TLS 通讯密文都会被破解。为了解决这一问题，于是就有了 DH 密钥协商算法，这里简单介绍它的工作流程。<img src="/2023/02/18/HTTP%E6%BC%94%E5%8F%98/640-167670373326129.png" alt="图片">客户端和服务端各自会生成随机数，并以此作为私钥，然后根据公开的 DH 计算公示算出各自的公钥，通过 TLS 握手双方交换各自的公钥，这样双方都有自己的私钥和对方的公钥，然后双方根据各自持有的材料算出一个随机数，这个随机数的值双方都是一样的，这就可以作为后续对称加密时使用的密钥。DH 密钥交换过程中，<strong>即使第三方截获了 TLS 握手阶段传递的公钥，在不知道的私钥的情况下，也是无法计算出密钥的，而且每一次对称加密密钥都是实时生成的，实现前向保密</strong>。但因为 DH 算法的计算效率问题，后面出现了 ECDHE 密钥协商算法，我们现在大多数网站使用的正是 ECDHE 密钥协商算法，关于 ECDHE 握手的过程，将在下一篇揭晓，尽情期待哦。</p>
+<h2 id="RSA-和-ECDHE-握手过程的区别"><a href="#RSA-和-ECDHE-握手过程的区别" class="headerlink" title="RSA 和 ECDHE 握手过程的区别"></a>RSA 和 ECDHE 握手过程的区别</h2><ul>
+<li>ECDHE 握手，也就是主流的 TLS1.2 握手中，使用ECDHE实现 pre_random 的加密解密，没有用到 RSA。</li>
+<li>使用 ECDHE 还有一个特点，就是客户端发送完收尾消息后可以<strong>提前抢跑</strong>，直接发送 HTTP 报文，节省了一个 RTT，不必等到收尾消息到达服务器，然后等服务器返回收尾消息给自己，直接开始发请求。这也叫TLS False Start</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://water001-maker.github.io">Xue_Water</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://water001-maker.github.io/2023/02/18/HTTP%E6%BC%94%E5%8F%98/">https://water001-maker.github.io/2023/02/18/HTTP演变/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://water001-maker.github.io" target="_blank">幻想家的秘密基地</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></div><div class="post_share"><div class="social-share" data-image="/img/cover9.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/02/18/HTTP/" title="HTTP详解"><img class="cover" src="/img/cover1.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">HTTP详解</div></div></a></div><div class="next-post pull-right"><a href="/2023/02/18/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="算法与数据结构"><img class="cover" src="/img/cover12.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">算法与数据结构</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/02/18/HTTP/" title="HTTP详解"><img class="cover" src="/img/cover1.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-02-18</div><div class="title">HTTP详解</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Xue_Water</div><div class="author-info__description">学而不思则罔，思而不学则殆</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Water001-maker"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">一个努力学习的小白，会不定期将自己的学习笔记整理到这里，仅供大家学习和参考。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP1-1"><span class="toc-number">1.</span> <span class="toc-text">HTTP1.1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP1-1%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-number">1.1.</span> <span class="toc-text">HTTP1.1的特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSL-x2F-TLS"><span class="toc-number">1.2.</span> <span class="toc-text">SSL&#x2F;TLS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP1-1%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-number">1.3.</span> <span class="toc-text">HTTP1.1的缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP1-1%E7%9A%84%E6%80%A7%E8%83%BD"><span class="toc-number">1.4.</span> <span class="toc-text">HTTP1.1的性能</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP%E7%9A%84%E6%BC%94%E5%8F%98"><span class="toc-number">2.</span> <span class="toc-text">HTTP的演变</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP1-1-1"><span class="toc-number">2.1.</span> <span class="toc-text">HTTP1.1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP2-0"><span class="toc-number">2.2.</span> <span class="toc-text">HTTP2.0</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%B4%E9%83%A8%E5%8E%8B%E7%BC%A9"><span class="toc-number">2.2.0.1.</span> <span class="toc-text">头部压缩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%A0%BC%E5%BC%8F"><span class="toc-number">2.2.0.2.</span> <span class="toc-text">二进制格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81"><span class="toc-number">2.2.0.3.</span> <span class="toc-text">数据流</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="toc-number">2.2.0.4.</span> <span class="toc-text">多路复用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8E%A8%E9%80%81"><span class="toc-number">2.2.0.5.</span> <span class="toc-text">服务器推送</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP3-0"><span class="toc-number">2.3.</span> <span class="toc-text">HTTP3.0</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP%E5%92%8CHTTPS"><span class="toc-number">3.</span> <span class="toc-text">HTTP和HTTPS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%BA%E5%88%AB"><span class="toc-number">3.1.</span> <span class="toc-text">区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTPS%E5%AE%89%E5%85%A8%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-number">3.2.</span> <span class="toc-text">HTTPS安全的原因</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E5%8A%A0%E5%AF%86"><span class="toc-number">3.2.1.</span> <span class="toc-text">混合加密</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%91%98%E8%A6%81%E7%AE%97%E6%B3%95"><span class="toc-number">3.2.2.</span> <span class="toc-text">摘要算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6"><span class="toc-number">3.2.3.</span> <span class="toc-text">证书</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTPS%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-number">3.3.</span> <span class="toc-text">HTTPS建立连接的过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-ClientHello"><span class="toc-number">3.3.0.1.</span> <span class="toc-text">1. ClientHello</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-SeverHello"><span class="toc-number">3.3.0.2.</span> <span class="toc-text">2. SeverHello</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%9B%9E%E5%BA%94"><span class="toc-number">3.3.0.3.</span> <span class="toc-text">3. 客户端回应</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%9C%80%E5%90%8E%E5%9B%9E%E5%BA%94"><span class="toc-number">3.3.0.4.</span> <span class="toc-text">4. 服务器的最后回应</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TLS%E7%9A%84%E6%8F%A1%E6%89%8B%E8%BF%87%E7%A8%8B"><span class="toc-number">3.4.</span> <span class="toc-text">TLS的握手过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="toc-number">3.4.1.</span> <span class="toc-text">TLS 第一次握手</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="toc-number">3.4.2.</span> <span class="toc-text">TLS 第二次握手</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="toc-number">3.4.3.</span> <span class="toc-text">TLS 第三次握手</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-%E7%AC%AC%E5%9B%9B%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="toc-number">3.4.4.</span> <span class="toc-text">TLS 第四次握手</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E5%9B%9B%E6%AC%A1"><span class="toc-number">3.4.5.</span> <span class="toc-text">为什么是四次</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TLS-1-3-%E5%81%9A%E4%BA%86%E5%93%AA%E4%BA%9B%E6%94%B9%E8%BF%9B%EF%BC%9F"><span class="toc-number">3.5.</span> <span class="toc-text">TLS 1.3 做了哪些改进？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%BA%E5%8C%96%E5%AE%89%E5%85%A8"><span class="toc-number">3.5.1.</span> <span class="toc-text">强化安全</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E5%8D%87%E6%80%A7%E8%83%BD"><span class="toc-number">3.5.2.</span> <span class="toc-text">提升性能</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8F%A1%E6%89%8B%E6%94%B9%E8%BF%9B"><span class="toc-number">3.5.2.1.</span> <span class="toc-text">握手改进</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%9A%E8%AF%9D%E5%A4%8D%E7%94%A8"><span class="toc-number">3.5.2.2.</span> <span class="toc-text">会话复用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PSK"><span class="toc-number">3.5.2.3.</span> <span class="toc-text">PSK</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RSA-%E7%AE%97%E6%B3%95%E7%9A%84%E7%BC%BA%E9%99%B7"><span class="toc-number">3.6.</span> <span class="toc-text">RSA 算法的缺陷</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RSA-%E5%92%8C-ECDHE-%E6%8F%A1%E6%89%8B%E8%BF%87%E7%A8%8B%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">3.7.</span> <span class="toc-text">RSA 和 ECDHE 握手过程的区别</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/03/01/Dubbo/" title="Dubbo学习笔记"><img src="/img/cover9.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Dubbo学习笔记"/></a><div class="content"><a class="title" href="/2023/03/01/Dubbo/" title="Dubbo学习笔记">Dubbo学习笔记</a><time datetime="2023-02-28T16:00:00.000Z" title="发表于 2023-03-01 00:00:00">2023-03-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/27/%E8%BF%9B%E7%A8%8B%E4%B9%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E6%B3%95/" title="进程之间的通信方法"><img src="/img/cover15.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="进程之间的通信方法"/></a><div class="content"><a class="title" href="/2023/02/27/%E8%BF%9B%E7%A8%8B%E4%B9%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E6%B3%95/" title="进程之间的通信方法">进程之间的通信方法</a><time datetime="2023-02-26T16:00:00.000Z" title="发表于 2023-02-27 00:00:00">2023-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/26/Lambda&amp;Stream/" title="Lambda&amp;Stream"><img src="/img/cover6.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Lambda&amp;Stream"/></a><div class="content"><a class="title" href="/2023/02/26/Lambda&amp;Stream/" title="Lambda&amp;Stream">Lambda&amp;Stream</a><time datetime="2023-02-25T16:00:00.000Z" title="发表于 2023-02-26 00:00:00">2023-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/23/MQ%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" title="MQ常见问题"><img src="/img/cover15.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MQ常见问题"/></a><div class="content"><a class="title" href="/2023/02/23/MQ%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" title="MQ常见问题">MQ常见问题</a><time datetime="2023-02-22T16:00:00.000Z" title="发表于 2023-02-23 00:00:00">2023-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/21/ZGC/" title="ZGC"><img src="/img/cover12.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ZGC"/></a><div class="content"><a class="title" href="/2023/02/21/ZGC/" title="ZGC">ZGC</a><time datetime="2023-02-20T16:00:00.000Z" title="发表于 2023-02-21 00:00:00">2023-02-21</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/cover9.png')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Xue_Water</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://water001-maker.github.io/2023/02/18/HTTP%E6%BC%94%E5%8F%98/'
+    this.page.identifier = '/2023/02/18/HTTP%E6%BC%94%E5%8F%98/'
+    this.page.title = 'HTTP的发展'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+
+  document.getElementById('darkmode').addEventListener('click', () => {
+    setTimeout(() => window.disqusReset(), 200)
+  })
+}
+
+if ('Valine' === 'Disqus' || !false) {
+  if (false) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="true" data-text="JVM,JDK,JRE,Mysql,Redis,Spring,MQ,ES,Oracle,Jva" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
