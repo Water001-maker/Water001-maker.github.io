@@ -1,0 +1,374 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>RPC和HTTP | 幻想家的秘密基地</title><meta name="author" content="Xue_Water"><meta name="copyright" content="Xue_Water"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="概述RPC（即Remote Procedure Call，远程过程调用），主要是基于TCP&#x2F;IP协议；而HTTP服务主要是基于HTTP协议的。我们都知道HTTP协议是在传输层协议TCP之上的，所以效率来看的话，RPC当然是要更胜一筹啦！下面来具体说一说RPC服务和HTTP服务。 架构设计一个完整的RPC架构里面包含了四个核心的组件，分别是Client 、Server、Client Stu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RPC和HTTP">
+<meta property="og:url" content="https://water001-maker.github.io/2023/03/04/RPC&HTTP/index.html">
+<meta property="og:site_name" content="幻想家的秘密基地">
+<meta property="og:description" content="概述RPC（即Remote Procedure Call，远程过程调用），主要是基于TCP&#x2F;IP协议；而HTTP服务主要是基于HTTP协议的。我们都知道HTTP协议是在传输层协议TCP之上的，所以效率来看的话，RPC当然是要更胜一筹啦！下面来具体说一说RPC服务和HTTP服务。 架构设计一个完整的RPC架构里面包含了四个核心的组件，分别是Client 、Server、Client Stu">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://water001-maker.github.io/img/cover8.jpg">
+<meta property="article:published_time" content="2023-03-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-04T03:51:30.214Z">
+<meta property="article:author" content="Xue_Water">
+<meta property="article:tag" content="RPC">
+<meta property="article:tag" content="HTTP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://water001-maker.github.io/img/cover8.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://water001-maker.github.io/2023/03/04/RPC&amp;HTTP/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'RPC和HTTP',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-04 11:51:30'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = url => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      link.onload = () => resolve()
+      link.onerror = () => reject()
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">26</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover8.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="幻想家的秘密基地"><span class="site-name">幻想家的秘密基地</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">RPC和HTTP</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-03T16:00:00.000Z" title="发表于 2023-03-04 00:00:00">2023-03-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-04T03:51:30.214Z" title="更新于 2023-03-04 11:51:30">2023-03-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="RPC和HTTP"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p><strong>RPC</strong>（即Remote Procedure Call，远程过程调用），<strong>主要是基于TCP&#x2F;IP协议</strong>；而<strong>HTTP服务主要是基于HTTP协议</strong>的。我们都知道HTTP协议是在传输层协议TCP之上的，所以效率来看的话，RPC当然是要更胜一筹啦！下面来具体说一说RPC服务和HTTP服务。</p>
+<h2 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h2><p>一个完整的RPC架构里面包含了四个核心的组件，分别是Client 、Server、Client Stub、Server Stub，这个Stub大家可以理解为存根。分别说说这几个组件：</p>
+<ul>
+<li>客户端（Client），服务的调用方。</li>
+<li>服务端（Server），真正的服务提供者。</li>
+<li>客户端存根（Client Stub），存放服务端的地址消息，再将客户端的请求参数打包成网络消息，然后通过网络远程发送给服务方。</li>
+<li>服务端存根（Server Stub），接收客户端发送过来的消息，将消息解包，并调用本地的方法。</li>
+</ul>
+<p><img src="/2023/03/04/RPC&HTTP/image-20230304100314770.png" alt="image-20230304100314770"></p>
+<p>RPC主要是用在大型企业里面，因为大型企业里面系统繁多，业务线复杂，而且效率优势非常重要的一块，这个时候RPC的优势就比较明显了。实际的开发当中是这么做的，项目一般使用maven来管理。比如我们有一个处理订单的系统服务，先声明它的所有的接口（这里就是具体指Java中的interface），然后将整个项目打包为一个jar包，<strong>服务端这边引入这个二方库，然后实现相应的功能</strong>，<strong>客户端这边也只需要引入这个二方库即可调用了</strong>。为什么这么做？主要是为了减少客户端这边的jar包大小，因为每一次打包发布的时候，jar包太多总是会影响效率。另外也是将客户端和服务端解耦，提高代码的可移植性。</p>
+<p><strong>API</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">loginService</span> &#123;</span><br><span class="line">    String <span class="title function_">login</span><span class="params">(String username,String password)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Service</strong></p>
+<p>dubbo配置文件，通过RPC传输</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:dubbo</span>=<span class="string">&quot;http://code.alibabatech.com/schema/dubbo&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="string"><span class="tag">      http://www.springframework.org/schema/beans/spring-beans-4.2.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://code.alibabatech.com/schema/dubbo</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://code.alibabatech.com/schema/dubbo/dubbo.xsd&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--dubbo全局的服务名--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:application</span> <span class="attr">name</span>=<span class="string">&quot;dubbo-server&quot;</span> /&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--注册中心--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:registry</span> <span class="attr">address</span>=<span class="string">&quot;N/A&quot;</span> <span class="attr">timeout</span>=<span class="string">&quot;10000&quot;</span> <span class="attr">check</span>=<span class="string">&quot;false&quot;</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--&lt;dubbo:registry address=&quot;nacos://localhost:8848&quot;/&gt;--&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 服务名称 及 端口号--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:protocol</span> <span class="attr">name</span>=<span class="string">&quot;dubbo&quot;</span> <span class="attr">port</span>=<span class="string">&quot;20880&quot;</span> /&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--需要发布的服务--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:service</span> <span class="attr">interface</span>=<span class="string">&quot;com.example.dubbo.server.loginService&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;loginService&quot;</span> /&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--dubbo的实现--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;loginService&quot;</span>  <span class="attr">class</span>=<span class="string">&quot;com.example.dubbo.server.loginServiceImpl&quot;</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>引入api，并实现接口中的方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">loginServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">loginService</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">login</span><span class="params">(String username, String password)</span> &#123;</span><br><span class="line">        <span class="comment">//实现业务逻辑</span></span><br><span class="line">        <span class="keyword">if</span> (username.equals(<span class="string">&quot;admin&quot;</span>)&amp;password.equals(<span class="string">&quot;admin&quot;</span>))&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;SUCCESS&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;FAILED&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Client</strong></p>
+<p>dubbo配置文件，通过RPC传输</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:dubbo</span>=<span class="string">&quot;http://code.alibabatech.com/schema/dubbo&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="string"><span class="tag">      http://www.springframework.org/schema/beans/spring-beans-4.2.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://code.alibabatech.com/schema/dubbo</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://code.alibabatech.com/schema/dubbo/dubbo.xsd&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--dubbo名称--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:application</span> <span class="attr">name</span>=<span class="string">&quot;dubbo-client&quot;</span> /&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--注册中心--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:registry</span> <span class="attr">address</span>=<span class="string">&quot;nacos://localhost:8848&quot;</span> <span class="attr">timeout</span>=<span class="string">&quot;10000&quot;</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--服务地址--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:reference</span> <span class="attr">id</span>=<span class="string">&quot;loginService&quot;</span> <span class="attr">interface</span>=<span class="string">&quot;com.example.dubbo.serverloginService&quot;</span></span></span><br><span class="line"><span class="tag">                     <span class="attr">url</span>=<span class="string">&quot;dubbo://192.168.31.170:20880/com.example.dubbo.serverloginService&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>引入api，通过RPC调用服务端方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Application</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">loginService</span> <span class="variable">loginService</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="type">ApplicationContext</span> <span class="variable">ac</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;classpath:/META-INF/spring/application.xml&quot;</span>);</span><br><span class="line">        loginService = ac.getBean(loginService.class);</span><br><span class="line">        System.out.println(loginService.login(<span class="string">&quot;admin&quot;</span>, <span class="string">&quot;admin&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="调用过程"><a href="#调用过程" class="headerlink" title="调用过程"></a>调用过程</h2><p><img src="/2023/03/04/RPC&HTTP/image-20230304102538311.png" alt="image-20230304102538311"></p>
+<ol>
+<li><p>客户端（client）以本地调用方式（即以接口的方式）调用服务；</p>
+</li>
+<li><p>客户端存根（client stub）接收到调用后，负责将方法、参数等组装成能够进行网络传输的消息体（将消息体对象序列化为二进制）；</p>
+</li>
+<li><p>客户端通过sockets将消息发送到服务端；</p>
+</li>
+<li><p>服务端存根( server stub）收到消息后进行解码（将消息对象反序列化）；</p>
+</li>
+<li><p>服务端存根( server stub）根据解码结果调用本地的服务；</p>
+</li>
+<li><p>本地服务执行并将结果返回给服务端存根( server stub）；</p>
+</li>
+<li><p>服务端存根( server stub）将返回结果打包成消息（将结果消息对象序列化）；</p>
+</li>
+<li><p>服务端（server）通过sockets将消息发送到客户端；</p>
+</li>
+<li><p>客户端存根（client stub）接收到结果消息，并进行解码（将结果消息发序列化）；</p>
+</li>
+<li><p>客户端（client）得到最终结果。</p>
+</li>
+</ol>
+<p><strong>RPC的目标是要把2、3、4、7、8、9这些步骤都封装起来。</strong></p>
+<p>注意：无论是何种类型的数据，最终都需要转换成二进制流在网络上进行传输，<strong>数据的发送方需要将对象转换为二进制流，而数据的接收方则需要把二进制流再恢复为对象。</strong></p>
+<h2 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h2><p>什么是同步调用？什么是异步调用？同步调用就是客户端等待调用执行完成并返回结果。异步调用就是客户端不等待调用执行完成返回结果，不过依然可以通过回调函数等接收到返回结果的通知。如果客户端并不关心结果，则可以变成一个单向的调用。</p>
+<p>这个过程有点类似于Java中的callable和runnable接口，我们进行异步执行的时候，如果需要知道执行的结果，就可以使用callable接口，并且可以通过Future类获取到异步执行的结果信息。如果不关心执行的结果，直接使用runnable接口就可以了，因为它不返回结果，当然啦，callable也是可以的，我们不去获取Future就可以了。</p>
+<p><strong>线程异步实例</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestFutureTask</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        FutureTask&lt;String&gt; ft1 = <span class="keyword">new</span> <span class="title class_">FutureTask</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">Task1</span>());</span><br><span class="line">        FutureTask&lt;String&gt; ft2 = <span class="keyword">new</span> <span class="title class_">FutureTask</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">Task2</span>(ft1));</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(ft1);</span><br><span class="line">        t1.start();</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(ft2);</span><br><span class="line">        t2.start();</span><br><span class="line">        System.out.println(ft2.get());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Task2</span> <span class="keyword">implements</span> <span class="title class_">Callable</span>&lt;String&gt; &#123;</span><br><span class="line">        <span class="keyword">private</span> FutureTask&lt;String&gt; futureTask;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">Task2</span><span class="params">(FutureTask futureTask)</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.futureTask = futureTask;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> String <span class="title function_">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程2：吸水壶&quot;</span>);</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;线程2：烧开水&quot;</span>);</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> futureTask.get();</span><br><span class="line">            System.out.println(<span class="string">&quot;线程2：拿到茶叶：&quot;</span> + result);</span><br><span class="line">            System.out.println(<span class="string">&quot;线程2：泡茶&quot;</span>);</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;上茶喽...&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Task1</span> <span class="keyword">implements</span> <span class="title class_">Callable</span>&lt;String&gt; &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> String <span class="title function_">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程1：洗茶壶&quot;</span>);</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;线程1：洗茶杯&quot;</span>);</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;线程1：拿茶叶&quot;</span>);</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;龙井&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>运行结果如下：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">线程1：洗茶壶</span><br><span class="line">线程2：吸水壶</span><br><span class="line">线程1：洗茶杯</span><br><span class="line">线程2：烧开水</span><br><span class="line">线程1：拿茶叶</span><br><span class="line">线程2：拿到茶叶：龙井</span><br><span class="line">线程2：泡茶</span><br><span class="line">上茶喽...</span><br></pre></td></tr></table></figure>
+
+<h2 id="常见的RPC框架"><a href="#常见的RPC框架" class="headerlink" title="常见的RPC框架"></a>常见的RPC框架</h2><ol>
+<li><p><strong>gRPC</strong>：Google公布的开源软件，基于最新的HTTP2.0协议，并支持常见的众多编程语言。 我们知道<strong>HTTP2.0</strong>是基于二进制的HTTP协议升级版本，目前各大浏览器都在快马加鞭的加以支持。 这个RPC框架是基于HTTP协议实现的，底层使用到了<strong>Netty</strong>框架的支持。</p>
+<ul>
+<li>优点<ul>
+<li>基于 HTTP2 的协议足够简单，用户学习成本低，天然有 server push&#x2F; 多路复用 &#x2F; 流量控制能力</li>
+<li>基于 Protobuf 的多语言跨平台二进制兼容能力，提供强大的统一跨语言能力</li>
+<li>基于协议本身的生态比较丰富，k8s&#x2F;etcd 等组件的天然支持协议，云原生的事实协议标准</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>对服务治理的支持比较基础，更偏向于基础的 RPC 功能，协议层缺少必要的统一定义，对于用户而言直接用起来并不容易。</li>
+<li>强绑定 protobuf 的序列化方式，需要较高的学习成本和改造成本，对于现有的偏单语言的用户而言，迁移成本不可忽视</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Thrift</strong>：Facebook的一个开源项目，主要是一个跨语言的服务开发框架。它有一个代码生成器来对它所定义的IDL定义文件自动生成服务代码框架。用户只要在其之前进行二次开发就行，对于底层的RPC通讯等都是透明的。不过这个对于用户来说的话需要学习特定领域语言这个特性，还是有一定成本的。</p>
+</li>
+<li><p><strong>Dubbo</strong>：阿里集团开源的一个极为出名的RPC框架，在很多互联网公司和企业应用中广泛使用。协议和序列化框架都可以插拔是及其鲜明的特色。同样的远程接口是基于Java Interface，并且依托于spring框架方便开发。可以方便的打包成单一文件，独立进程运行，和现在的微服务概念一致。</p>
+</li>
+<li><p><strong>Triple协议</strong></p>
+<p>最终我们选择了兼容 gRPC ，以 HTTP2 作为传输层构建新的协议，也就是 Triple。</p>
+<p><img src="/2023/03/04/RPC&HTTP/image-20230304105443750.png" alt="image-20230304105443750"></p>
+<ul>
+<li>相较于其他协议的优势<ul>
+<li>性能上: Triple 协议采取了 metadata 和 payload 分离的策略，这样就可以避免中间设备，如网关进行 payload 的解析和反序列化，从而降低响应时间。</li>
+<li>路由支持上，由于 metadata 支持用户添加自定义 header ，用户可以根据 header 更方便的划分集群或者进行路由，这样发布的时候切流灰度或容灾都有了更高的灵活性。</li>
+<li>安全性上，支持双向TLS认证（mTLS）等加密传输能力。</li>
+<li>易用性上，gRPC 强行绑定了protobuf 的序列化方式，需要较高的学习成本和改造成本；Triple 除了支持原生 gRPC 所推荐的 Protobuf 序列化外，使用通用的方式支持了 Hessian &#x2F; JSON 等其他序列化，能让用户更方便的升级到 Triple 协议。对原有的 Dubbo 服务而言，修改或增加 Triple 协议 只需要在声明服务的代码块添加一行协议配置即可，改造成本几乎为 0。</li>
+</ul>
+</li>
+<li>现状<ul>
+<li>完整兼容grpc、客户端&#x2F;服务端可以与原生grpc客户端打通</li>
+<li>目前已经经过大规模生产实践验证，达到生产级别</li>
+</ul>
+</li>
+<li>特点与优势<ul>
+<li>具备跨语言互通的能力，传统的多语言多 SDK 模式和 Mesh 化跨语言模式都需要一种更通用易扩展的数据传输格式。</li>
+<li>提供更完善的请求模型，除了 Request&#x2F;Response 模型，还应该支持 Streaming 和 Bidirectional。</li>
+<li>易扩展、穿透性高，包括但不限于 Tracing &#x2F; Monitoring 等支持，也应该能被各层设备识别，网关设施等可以识别数据报文，对 Service Mesh 部署友好，降低用户理解难度。</li>
+<li>多种序列化方式支持、平滑升级</li>
+<li>支持 Java 用户无感知升级，不需要定义繁琐的 IDL 文件，仅需要简单的修改协议名便可以轻松升级到 Triple 协议</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="自定义一个RPC框架"><a href="#自定义一个RPC框架" class="headerlink" title="自定义一个RPC框架"></a>自定义一个RPC框架</h1><p><img src="/2023/03/04/RPC&HTTP/image-20230304111518773.png" alt="image-20230304111518773"></p>
+<ul>
+<li><p>rpc-sample-client相当于client-functions，通过接口方法发起请求；</p>
+</li>
+<li><p>rpc-client相当于client-stub，负责把方法和参数序列化并发送给查找到的服务器；</p>
+</li>
+<li><p>rpc-server相当于server stub，负责把客户端发送过来的消息反序列化，并通过反射调用本地服务，再把本地服务返回的结果序列化发送给客户端；</p>
+</li>
+<li><p>rpc-sample-server则相当于server-functions，提供本地服务并返回得出的结果给rpc-server；</p>
+</li>
+<li><p>rpc-client等待接收rpc-server返回的结果，并将结果反序列化，再把反序列化最终得到的结果返回给rpc-sample-client。</p>
+</li>
+<li><p>rpc-common提供基于netty的序列化与反序列化方法，并封装rpc请求和rpc响应，序列化和反序列的对象就是封装好的RpcRequest和RpcResponse；</p>
+</li>
+<li><p>rpc-registry则是基于zookeeper设计的分布式服务器动态上下线通知的应用程序，通过rpc-registry可以查找服务器或者注册服务器，用于均衡负载；</p>
+</li>
+<li><p>rpc-client与rpc-server之间的通信是基于netty的，netty底层也是sockets设计，但是效率比sockets高。</p>
+</li>
+</ul>
+<h1 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h1><p>其实在很久以前，企业开发的模式一直定性为HTTP接口开发，也就是我们常说的restful风格的服务接口。对于在接口不多、系统与系统交互较少的情况下，解决信息孤岛初期常使用的一种通信手段；优点就是简单、直接、开发方便。利用现成的http协议进行传输。</p>
+<p>接口可能返回一个JSON字符串或者是XML文档。然后客户端再去处理这个返回的信息，从而可以比较快速地进行开发。<strong>但是对于大型企业来说，内部子系统较多、接口非常多的情况下，RPC框架的好处就显示出来了，首先就是长链接，不必每次通信都要像http一样去3次握手什么的，减少了网络开销；其次就是RPC框架一般都有注册中心，有丰富的监控管理；发布、下线接口、动态扩展等，对调用方来说是无感知、统一化的操作。</strong></p>
+<p><a href="https://water001-maker.github.io/2023/02/18/HTTP/">HTTP详解</a></p>
+<p><a href="https://water001-maker.github.io/2023/02/18/HTTP%E6%BC%94%E5%8F%98/">HTTP的发展</a></p>
+<h1 id="二者区别"><a href="#二者区别" class="headerlink" title="二者区别"></a>二者区别</h1><h2 id="功能侧重点不同"><a href="#功能侧重点不同" class="headerlink" title="功能侧重点不同"></a>功能侧重点不同</h2><p>SpringCloud：Spring公司开源的微服务框架，SpirngCloud 定位为<strong>微服务架构下的一站式解决方案。</strong></p>
+<p>Dubbo：阿里巴巴开源的RPC框架，Dubbo 是 SOA 时代的产物，<strong>它的关注点主要在于服务的调用和治理，流量分发、流量监控和熔断。</strong></p>
+<h2 id="生态环境不同"><a href="#生态环境不同" class="headerlink" title="生态环境不同"></a>生态环境不同</h2><p>SpringCloud生态丰富，功能完善，更像是品牌机；</p>
+<p>Dubbo则相对灵活，可定制性强，更像是组装机。</p>
+<h2 id="调用方式不同"><a href="#调用方式不同" class="headerlink" title="调用方式不同"></a>调用方式不同</h2><p>SpringCloud是采用Http协议做远程调用，<strong>接口一般是Rest风格，比较灵活</strong>；</p>
+<p>Dubbo是采用Dubbo协议，<strong>接口一般是Java的Service接口，格式固定</strong>。但调用时采用Netty的NIO方式，性能较好。</p>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
+<li>RPC服务主要是针对大型企业的；</li>
+<li>HTTP服务主要是针对小企业的，因为虽然RPC效率和性能更高，但是HTTP服务开发迭代会更快；</li>
+<li>在接口不多、系统与系统交互较少的情况下，Http通信是常使用的一种通信手段；优点就是简单、直接、开发方便。利用现成的http协议就可以进行服务间的数据传输。可以比较快速地进行开发；</li>
+<li>对于大型企业来说，内部子系统较多、接口非常多的情况下，RPC框架的好处就显示出来了。首先是长链接，不必每次通信都要像http一样去3次握手，减少了网络开销；其次，RPC框架一般都有注册中心，有丰富的监控管理；发布、下线接口、动态扩展等，对调用方来说是无感知、统一化的操作。</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li><strong>RPC 本身是一种框架，而http 是应用层的协议</strong>。RPC可以通过HTTP来实现，也可以通过Socket自己实现一套协议来实现。</li>
+<li>http接口是在接口不多、系统与系统交互较少的情况下，解决信息孤岛初期常使用的一种通信手段；优点就是简单、直接、开发方便。利用现成的http协议 进行传输。但是如果是一个大型的网站，内部子系统较多、接口非常多的情况下，RPC框架的好处就显示出来了。<ul>
+<li>首先就是长链接，不必每次通信都要像http 一样去3次握手什么的，减少了网络开销；</li>
+<li>其次就是RPC框架一般都有注册中心，有丰富的监控管理、发布、下线接口、动态扩展等，对调用方来说是无感知、统 一化的操作。</li>
+<li>最后就是安全性。最后就是最近流行的服务化架构、服务化治理，RPC框架是一个强力的支撑。</li>
+</ul>
+</li>
+<li>rpc是一种概念，http也是rpc实现的一种方式。论复杂度，dubbo&#x2F;hessian用起来是超级简单的。最近用dubbo和hessian比较多，http的几乎都被废弃了。</li>
+<li>RPC的核心并不在于使用什么协议。<strong>RPC的目的是让你在本地调用远程的方法，而对你来说这个调用是透明的，你并不知道这个调用的方法是部署哪里</strong>。通过RPC能解耦服务，这才是使用RPC的真正目的。RPC的原理主要用到了动态代理模式，至于http协议，只是传输协议而已。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://water001-maker.github.io">Xue_Water</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://water001-maker.github.io/2023/03/04/RPC&amp;HTTP/">https://water001-maker.github.io/2023/03/04/RPC&amp;HTTP/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://water001-maker.github.io" target="_blank">幻想家的秘密基地</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/RPC/">RPC</a><a class="post-meta__tags" href="/tags/HTTP/">HTTP</a></div><div class="post_share"><div class="social-share" data-image="/img/cover8.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/03/01/Dubbo/" title="Dubbo学习笔记"><img class="cover" src="/img/cover10.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Dubbo学习笔记</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Xue_Water</div><div class="author-info__description">学而不思则罔，思而不学则殆</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">26</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Water001-maker"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">一个努力学习的小白，会不定期将自己的学习笔记整理到这里，仅供大家学习和参考。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.1.</span> <span class="toc-text">架构设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">调用过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%BC%82%E6%AD%A5"><span class="toc-number">1.3.</span> <span class="toc-text">同步与异步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84RPC%E6%A1%86%E6%9E%B6"><span class="toc-number">1.4.</span> <span class="toc-text">常见的RPC框架</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AARPC%E6%A1%86%E6%9E%B6"><span class="toc-number">2.</span> <span class="toc-text">自定义一个RPC框架</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP"><span class="toc-number">3.</span> <span class="toc-text">HTTP</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E8%80%85%E5%8C%BA%E5%88%AB"><span class="toc-number">4.</span> <span class="toc-text">二者区别</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E4%BE%A7%E9%87%8D%E7%82%B9%E4%B8%8D%E5%90%8C"><span class="toc-number">4.1.</span> <span class="toc-text">功能侧重点不同</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%80%81%E7%8E%AF%E5%A2%83%E4%B8%8D%E5%90%8C"><span class="toc-number">4.2.</span> <span class="toc-text">生态环境不同</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E6%96%B9%E5%BC%8F%E4%B8%8D%E5%90%8C"><span class="toc-number">4.3.</span> <span class="toc-text">调用方式不同</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">4.4.</span> <span class="toc-text">使用场景</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/03/04/RPC&amp;HTTP/" title="RPC和HTTP"><img src="/img/cover8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RPC和HTTP"/></a><div class="content"><a class="title" href="/2023/03/04/RPC&amp;HTTP/" title="RPC和HTTP">RPC和HTTP</a><time datetime="2023-03-03T16:00:00.000Z" title="发表于 2023-03-04 00:00:00">2023-03-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/01/Dubbo/" title="Dubbo学习笔记"><img src="/img/cover10.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Dubbo学习笔记"/></a><div class="content"><a class="title" href="/2023/03/01/Dubbo/" title="Dubbo学习笔记">Dubbo学习笔记</a><time datetime="2023-02-28T16:00:00.000Z" title="发表于 2023-03-01 00:00:00">2023-03-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/27/%E8%BF%9B%E7%A8%8B%E4%B9%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E6%B3%95/" title="进程之间的通信方法"><img src="/img/cover8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="进程之间的通信方法"/></a><div class="content"><a class="title" href="/2023/02/27/%E8%BF%9B%E7%A8%8B%E4%B9%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E6%B3%95/" title="进程之间的通信方法">进程之间的通信方法</a><time datetime="2023-02-26T16:00:00.000Z" title="发表于 2023-02-27 00:00:00">2023-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/26/Lambda&amp;Stream/" title="Lambda&amp;Stream"><img src="/img/cover11.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Lambda&amp;Stream"/></a><div class="content"><a class="title" href="/2023/02/26/Lambda&amp;Stream/" title="Lambda&amp;Stream">Lambda&amp;Stream</a><time datetime="2023-02-25T16:00:00.000Z" title="发表于 2023-02-26 00:00:00">2023-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/23/MQ%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" title="MQ常见问题"><img src="/img/cover2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MQ常见问题"/></a><div class="content"><a class="title" href="/2023/02/23/MQ%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" title="MQ常见问题">MQ常见问题</a><time datetime="2023-02-22T16:00:00.000Z" title="发表于 2023-02-23 00:00:00">2023-02-23</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/cover8.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Xue_Water</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://water001-maker.github.io/2023/03/04/RPC&HTTP/'
+    this.page.identifier = '/2023/03/04/RPC&HTTP/'
+    this.page.title = 'RPC和HTTP'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+
+  document.getElementById('darkmode').addEventListener('click', () => {
+    setTimeout(() => window.disqusReset(), 200)
+  })
+}
+
+if ('Valine' === 'Disqus' || !false) {
+  if (false) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="true" data-text="JVM,JDK,JRE,Mysql,Redis,Spring,MQ,ES,Oracle,Jva" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
