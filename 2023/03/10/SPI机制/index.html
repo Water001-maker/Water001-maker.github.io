@@ -1,0 +1,341 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>SPI机制 | 幻想家的秘密基地</title><meta name="author" content="Xue_Water"><meta name="copyright" content="Xue_Water"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="这几天在学习Dubbo对其中的SPI机制很感兴趣，于是决定进一步了解一下。（本文基于dubbo3.0.4） SPI机制SPI (Service Provider Interface)，主要用于扩展的作用。 假如有一个框架有一个接口，他有自己默认的实现类，但是在代码运行的过程中，你不想用他的实现类或者想扩展一下他的实现类的功能，但是此时你又不能修改别人的源码，那么此时该怎么办？ 这时spi机制就有了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SPI机制">
+<meta property="og:url" content="https://water001-maker.github.io/2023/03/10/SPI%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="幻想家的秘密基地">
+<meta property="og:description" content="这几天在学习Dubbo对其中的SPI机制很感兴趣，于是决定进一步了解一下。（本文基于dubbo3.0.4） SPI机制SPI (Service Provider Interface)，主要用于扩展的作用。 假如有一个框架有一个接口，他有自己默认的实现类，但是在代码运行的过程中，你不想用他的实现类或者想扩展一下他的实现类的功能，但是此时你又不能修改别人的源码，那么此时该怎么办？ 这时spi机制就有了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://water001-maker.github.io/img/cover13.jpg">
+<meta property="article:published_time" content="2023-03-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-10T16:08:12.088Z">
+<meta property="article:author" content="Xue_Water">
+<meta property="article:tag" content="DUBBO">
+<meta property="article:tag" content="SPI机制">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://water001-maker.github.io/img/cover13.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://water001-maker.github.io/2023/03/10/SPI%E6%9C%BA%E5%88%B6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SPI机制',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-11 00:08:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = url => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      link.onload = () => resolve()
+      link.onerror = () => reject()
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">29</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">28</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover13.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="幻想家的秘密基地"><span class="site-name">幻想家的秘密基地</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">SPI机制</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-09T16:00:00.000Z" title="发表于 2023-03-10 00:00:00">2023-03-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-10T16:08:12.088Z" title="更新于 2023-03-11 00:08:12">2023-03-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">5.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="SPI机制"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>这几天在学习Dubbo对其中的SPI机制很感兴趣，于是决定进一步了解一下。（本文基于dubbo3.0.4）</p>
+<h1 id="SPI机制"><a href="#SPI机制" class="headerlink" title="SPI机制"></a>SPI机制</h1><p>SPI (Service Provider Interface)，主要用于扩展的作用。</p>
+<p>假如有一个框架有一个接口，他有自己默认的实现类，但是在代码运行的过程中，你不想用他的实现类或者想扩展一下他的实现类的功能，但是此时你又不能修改别人的源码，那么此时该怎么办？</p>
+<p>这时spi机制就有了用武之地。一般框架的作者在设计这种接口的时候不会直接去new这个接口的实现类，而是在Classpath路径底下将这个接口的实现类按作者约定的格式写在一个配置文件上，然后在运行的过程中通过java提供的api，从所有jar包中读取所有的这个指定文件中的内容，获取到实现类，用这个实现类，这样，如果你想自己替换原有的框架的实现，你就可以按照作者规定的方式配置实现，这样就能使用你自己写的实现类了。</p>
+<h1 id="java的spi机制"><a href="#java的spi机制" class="headerlink" title="java的spi机制"></a>java的spi机制</h1><p>java中最常见的spi机制应用就是数据库驱动的加载，java其实就是定义了java语言跟数据库交互的接口，但是具体的实现得交给各大数据库厂商来实现，那么java怎么知道你的数据库厂商的实现了？这时就需要spi机制了，java好约了定在 Classpath 路径下的 META-INF&#x2F;services&#x2F; 目录里创建一个以服务接口命名的文件，然后内容是该数据库厂商的实现的接口的权限定名，这样数据库厂商只要按照这个规则去配置，java就能找到。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310224928149.png" alt="image-20230310224928149"></p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310224940588.png" alt="image-20230310224940588"></p>
+<p>ava是通过ServiceLoader类来实现读取配置文件中的实现类的。</p>
+<h1 id="spring中的spi机制"><a href="#spring中的spi机制" class="headerlink" title="spring中的spi机制"></a>spring中的spi机制</h1><p>相信spring大家都不陌生，在spring扩展也是依赖spi机制完成的，只不过spring对于扩展文件约定在Classpath 路径下的 META-INF目录底下，所有的文件名都是叫spring.factories，文件里的内容是一个以一个个键值对的方式存储的，键为类的全限定名，值也为类的全限定名，如果有多个值，可以用逗号分割。</p>
+<p>最常见的自动装配的注解，@EnableAutoConfiguration，也就是代表自动装配的场景，当你需要你的类被自动装配，就可以以这个注解的权限定名键，你的类为名，这样springboot在进行自动装配的时候，就会拿这个键，找到你写的实现类来完成自动装配。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310225901246.png" alt="image-20230310225901246"></p>
+<p>mybatis也是按照spring的规则来配置的。大家有空可以去看MybatisAutoConfiguration这个实现类，里面有mybatis是如何跟spring整合的内容。</p>
+<p>SpringFactoriesLoader的应用场景还有很多，大家可以去看一下SpringBoot中的启动引导类SpringApplication，里面多次使用到了这个SpringFactoriesLoader这个类来获取各种实现。</p>
+<h1 id="dubbo的spi机制"><a href="#dubbo的spi机制" class="headerlink" title="dubbo的spi机制"></a>dubbo的spi机制</h1><p>ExtensionLoader是dubbo的spi机制所实现的类，通过这个类来加载接口所有实现类，获取实现类的对象。同时每一个接口都会有一个自己的ExtensionLoader。</p>
+<h2 id="java的spi机制的缺点"><a href="#java的spi机制的缺点" class="headerlink" title="java的spi机制的缺点"></a>java的spi机制的缺点</h2><p>java约定了文件名为接口的名称，内容为实现。</p>
+<p>这种做法是有缺陷的：虽然我获取到了所有的实现类，但是无法对实现类进行分类，也就是说我无法确定到底该用哪个实现类，并且java的spi机制会一次性给所有的实现类创建对象，如果这个对象你根本不会使用，那么此时就会白白浪费资源，也就是说无法做到按需加载。</p>
+<p>所以，dubbo就自己实现了一套spi机制，不仅解决了以上的痛点，同时也加入了更多的特性。</p>
+<h2 id="dubbo的配置文件约束"><a href="#dubbo的配置文件约束" class="headerlink" title="dubbo的配置文件约束"></a>dubbo的配置文件约束</h2><p>dubbo会从四个目录读取文件META-INF&#x2F;dubbo&#x2F;internal&#x2F; 、META-INF&#x2F;dubbo&#x2F; 、META-INF&#x2F;services&#x2F;、META-INF&#x2F;dubbo&#x2F;external&#x2F;，文件名为接口的全限定名，内容为键值对，键为短名称（可以理解为spring中的对象的名称），值为实现类。</p>
+<h2 id="SPI注解的约束"><a href="#SPI注解的约束" class="headerlink" title="@SPI注解的约束"></a>@SPI注解的约束</h2><p>dubbo中所有的扩展接口，都需要在接口上加@SPI注解，不然在创建ExtensionLoader的时候，会报错。</p>
+<p>ExtensionDirector的作用：在3.0.3以前的版本，是没有这个类的，但是在之后的版本为了实现一些新的特性，就抽象出来了这个类，通过这个类来获取每个接口对应的ExtensionLoader。</p>
+<h2 id="实现类的加载"><a href="#实现类的加载" class="headerlink" title="实现类的加载"></a>实现类的加载</h2><p>先说各种特性之前，先说一下这些实现类是如何加载的，类的加载是非常重要的一个环节，与后面的spi特性有重要的关系。</p>
+<p>类加载默认都是先调用getExtensionClasses这个方法的，当cachedClasses没有的时，才会去加载实现类，然后再把实现类放到cachedClasses中。真正实现加载的是loadExtensionClasses 方法。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310230542060.png" alt="image-20230310230542060"></p>
+<p><code>checkDestroyed();</code></p>
+<p>方法没什么用，其实就是一个检查的作用。</p>
+<p><code>cacheDefaultExtensionName();</code></p>
+<p>缓存默认实现类的短名称。其实很简单，就是从@SPI注解中取出名称，就是默认的实现类的名称，缓存起来，ExtensionLoader有个getDefaultExtension方法，其实就是通过这个短名称对应的实现类的对象。</p>
+<p>接下来会遍历LoadingStrategy，根据LoadingStrategy加载指定目录的文件。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310230717163.png" alt="image-20230310230717163"></p>
+<p>使用了java的spi机制加载LoadingStrategy，我们可以在Classpath 路径下的 META-INF&#x2F;services&#x2F;路径下找这个LoadingStrategy接口的全限定名的文件，发现有四个实现类，也就是会按照这四个的加载策略来读取实现类。其中有个方法directory，就是指定加载的目录，这也就是我们前面说的那几个dubbo会加载的目录，其实是从这个方法返回的，你可以自己去看看这四个实现类对于这个方法的实现。其实我们也可以实现这个接口，指定我们自己想加载的目录。</p>
+<p>这里会循环加载每个目录，我们进去loadDirectory方法。</p>
+<p>这个其实就是拿出LoadingStrategy来调用重载的loadDirectory方法。</p>
+<p>这里注意会调用两次loadDirectory，下面的那个是为了适配以前老版本的，不用关心。</p>
+<p>接下来进去重载的loadDirectory方法。</p>
+<p>可以看出，fileName就是LoadingStrategy所指定的目录 + 接口的全限定名，这里就解释了为什么实现类需要写在类全限定名的文件里。其实就是从每个jar底指定的目录类全限定名为名称的文件，得到每个jar底下的文件的URL。然后遍历每个URL，加载类，我们进入loadResource方法来看看具体是怎么加载的。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310231643493.png" alt="image-20230310231643493"></p>
+<p>通过URL打开一个输入流，然后读取文件内容，取出每一行，以 &#x3D; 进行分割（因为规定的是以键值对存的），键就是短名称，值就是实现类的名称，然后再进入loadClass方法，这个方法很重要，其实是对实现类进行一个分类，后面dubbo的特性实现的前提就是对这些实现类的分类操作。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310231729804.png" alt="image-20230310231729804"></p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310231736804.png" alt="image-20230310231736804"></p>
+<p>如果你加了@Adaptive注解，那么就将赋值到cachedAdaptiveClass属性上。我们叫这个类别为自适应类。什么是自适应，其实说白了这个类本身并没有实际的意义，它是根据你的入参动态来实现找到真正的实现类来完成调用。getAdaptiveExtension其实就是获取到这个自适应实现类对应的对象。<br>如果你的实现类是有一个该类型为参数的构造方法，那么就将这个实现类放到cachedWrapperClasses中，并且我们称这个类为包装类，就是将目标对象进行代理，可以增强功能。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310231842892.png" alt="image-20230310231842892"></p>
+<p>这处标红的意思是判断是不是实现类是不是加了@Activate注解，是的话就将短名称和注解放入cachedActivates中，我们称这类实现类为自动激活的类，所谓的自动激活，就是可以根据你的入参，动态选择实现一批符合条件的实现类</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310231911577.png" alt="image-20230310231911577"></p>
+<p>saveInExtensionClass就是将这个实现类放入extensionClasses中，该目录下的实现类就加载完成了。</p>
+<p>接下来会继续循环，加载不同的目录底下，都会进行分类，并放到extensionClasses中。</p>
+<p>当LoadingStrategy循环玩之后，最后将extensionClasses放入cachedClasses中，此时就完成了对于指定目录下实现类的加载和分类。</p>
+<p>至此，实现类的加载和分类就完成了。</p>
+<h2 id="实现类对象构造"><a href="#实现类对象构造" class="headerlink" title="实现类对象构造"></a>实现类对象构造</h2><p>看实现类对象构造过程之前，先看获取，因为获取不到才构造，也就是java中spi没有的功能，按需加载。</p>
+<p>获取实现类对象的方法是getExtension方法，传入的name参数就是短名称，也就是spi文件的键，wrap是是否包装的意思，true的意思就是对你获取的目标对象进行包装（具体什么是包装，如何包装后面会讲），wrap默认是true。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310233056016.png" alt="image-20230310233056016"></p>
+<p>第一个if比较简单，就是简单的参数校验，name参数不能为空</p>
+<p>第二个if判断name是不是字符串true，是的话就调用getDefaultExtension，getDefaultExtension这个方法通过名称也能看出来就是获取接口默认的实现，什么是默认实现？默认的实现就是@SPI注解中的名称对应的实现类。</p>
+<p>前面两个if之后就是真正获取实现了。在获取之前，先根据你是否包装构建缓存的键值，如果没有包装，就会在短名称后加上 <code>_origin</code> ，这主要是为了区分包不包装，然后进入getOrCreateHolder方法</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310233158482.png" alt="image-20230310233158482"></p>
+<p>里面其实就是通过缓存名称从cachedInstances获取一个Holder，获取不到就new一个Holder然后放到cachedInstances中，然后返回。Holder其实本身并没有什么意义，可以理解为一个空壳，里面放的才是真正最终返回的对象。</p>
+<p>第一次，不用说Holder肯定没有，那么这个Holder肯定是刚new出来的。</p>
+<p>跳出getOrCreateHolder方法，继续往下看。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310233244798.png" alt="image-20230310233244798"></p>
+<p>从Holder中获取实现类，此时肯定是null，接下来就是synchronized，然后又是非空判断。这里其实是典型的单例模式中的双重检查机制，保证并发安全。其实从这里可以看出Holder的作用。这里是为了减少锁冲突的，因为一个实现类对象对应一个Holder对象，这样不同的实现类在创建的时候，由于Holder的不同，synchronized就不是同一个锁对象，这就起到了并发时候减少锁冲突的作用，从这可以看出dubbo设计的时候的细节是很到位的。</p>
+<p>第一次都是null，接下来进入createExtension方法，构建对象的过程。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310233323967.png" alt="image-20230310233323967"></p>
+<p>先从实现类的缓存中获取到短名称对应的实现类，上面提到，实现类加载之后会放到内部的一个缓存中。</p>
+<p>这个if条件判断一般肯定是false的，但是有些情况，就比如第一次构建对象抛出异常，此时第二次来构建这个对象，那么不用说肯定也会有问题，dubbo为了快速知道哪些实现类对象构造的时候会出异常，就在第一次构建对象抛异常的时候缓存了实现类的短名称到unacceptableExceptions中，当第二次来构建的时候，能够快速知道，抛出异常，减少资源的浪费。</p>
+<p>接下来就会从extensionInstances中获取实例，这个实例是没有包装的实例，也就是说如果你获取的不带包装的实例，就是这个实例。我们看看这个实例是怎么构建出来的，这里我根据构建的不同阶段进行划分为以下几个步骤。</p>
+<h3 id="实例化对象"><a href="#实例化对象" class="headerlink" title="实例化对象"></a>实例化对象</h3><p>通过实例化策略InstantiationStrategy进行实例化，默认是通过无参构造器构造的。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310233504878.png" alt="image-20230310233504878"></p>
+<h3 id="初始化前ExtensionPostProcessor-回调"><a href="#初始化前ExtensionPostProcessor-回调" class="headerlink" title="初始化前ExtensionPostProcessor 回调"></a>初始化前ExtensionPostProcessor 回调</h3><p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310233525211.png" alt="image-20230310233525211"></p>
+<h3 id="依赖注入"><a href="#依赖注入" class="headerlink" title="依赖注入"></a>依赖注入</h3><p>接下来调用injectExtension方法，这个方法就是依赖注入的实现方法。</p>
+<p>依赖注入：说白了就是dubbo会自动调用需要依赖注入的方法，传入相应的参数</p>
+<p><strong>哪些方法是需要依赖注入的方法？</strong></p>
+<p>dubbo约定 方法名以set开头，方法的参数只有一个，方法上没有加@DisableInject注解 ，方法是public的，符合这类的方法就是需要依赖注入的方法，dubbo在构建对象的时候会自动调用这些方法，传入相应的参数。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310233800510.png" alt="image-20230310233800510"></p>
+<p>可以看出，先通过反射获取到所有的方法，然后遍历每个方法，进入两个if判断，这个判断就是判断是不是需要依赖注入的方法，也就是上面说的条件就在这个体现。</p>
+<p>假设是需要依赖注入的方法，接下来看看如何获得需要被注入的对象，也就是方法的参数。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310233851084.png" alt="image-20230310233851084"></p>
+<p>首先获取需要set的对象的class类型，就是方法的参数类型</p>
+<p>然后通过getSetterProperty方法获取属性名，可以理解为bean的名称，</p>
+<p>getSetterProperty就是方法去掉set然后第一个字母小写之后就是属性的名称，举个例子方法叫setUser，那么属性名就叫user，如果叫setUserName，属性名就叫userName，就这么简单。</p>
+<p>最后就是根据属性名和参数类型通过 ExtensionInjector 获取需要被注入的对象。</p>
+<p>ExtensionInjector就是注入器，通过这个可以获取到被依赖注入的对象，这是个接口，有很多实现，这里是 AdaptiveExtensionInjector 实现类，也是通过spi机制获取的，ExtensionLoader构造的时候获取的。</p>
+<p>AdaptiveExtensionInjector：ExtensionInjector的实现。自适应的，本身没有实际的意义，就是遍历所有其它的ExtensionInjector实现来获取，一旦有一个获取到，就不会再调用下一个ExtensionInjector来获取的</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310234106072.png" alt="image-20230310234106072"></p>
+<p>SpiExtensionInjector：顾名思义，就是通过spi机制来获取，获取的是自适应的实现</p>
+<p>SpringExtensionInjector：这个是通过spring容器获取实现，所以你通过dubbo的spi机制可以注入spring的bean</p>
+<p>ScopeBeanExtensionInjector：通过dubbo内部的组件BeanFactory来获取的，BeanFactory是dubbo内部用来在一定范围的bean的容器，主要是为了对象的重复利用来的。</p>
+<p>假设这里获取到了对象，那么接下来就是通过反射调用set方法，进行依赖注入，然后依赖注入就完成了。</p>
+<h3 id="ExtensionAccessorAware接口回调"><a href="#ExtensionAccessorAware接口回调" class="headerlink" title="ExtensionAccessorAware接口回调"></a>ExtensionAccessorAware接口回调</h3><p>如果你的接口实现了ExtensionAccessorAware接口，那么会注入给你的bean一个 ExtensionDirector ，ExtensionDirector 可以想象成是ExtensionLoader工厂，可以获取每个接口的ExtensionLoader。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310234154741.png" alt="image-20230310234154741"></p>
+<h3 id="初始化后ExtensionPostProcessor回调"><a href="#初始化后ExtensionPostProcessor回调" class="headerlink" title="初始化后ExtensionPostProcessor回调"></a>初始化后ExtensionPostProcessor回调</h3><p>调用ExtensionPostProcessor的 postProcessAfterInitialization方法对目标对象进行扩展的作用。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310234213061.png" alt="image-20230310234213061"></p>
+<h3 id="自动包装"><a href="#自动包装" class="headerlink" title="自动包装"></a>自动包装</h3><p>到这一步实现类本身的对象就算构造好了，接下来就是进行自动包装，如果wrap是true的话。</p>
+<p>自动包装：可以说是静态代理模式，就是对你的目标对象进行代理，怎么代理，就是通过包装类，什么是包装类，上文有说过，一个一个构造，慢慢构成一个调用链条，最终才会调用到真正的实现类。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310234254270.png" alt="image-20230310234254270"></p>
+<p>@Wrapper注解是个匹配的作用，就是根据需要属性从包装类中选择一批可以用来包装的类。</p>
+<p>构造其实很简单，就是当前instance当做包装类的构造参数通过反射构造，然后进行依赖注入，然后将构造出来的对象复制给instance，instance再进行回调之后再赋值给instance，这样往往复复就形成了一个链条。这里我画个图，让大家看看最后构造出来的对象是什么样。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310234444526.png" alt="image-20230310234444526"></p>
+<p>构造后的对象其实就是这样，你最终使用的对象其实是包装对象，如果你获取对象的时候传的wrap参数是true的话，当前默认情况下是true。最后调用的话就会先调用最外层的包装的方法（包装对象2），然后调用（包装对象1）一直调用，最后会调用到真正的目标对象的方法。</p>
+<p><strong>为什么需要包装？</strong></p>
+<p>很多人可能不清楚，为什么需要包装，其实很好理解，就是起到动态增强目标对象的作用。可以理解为spring中的aop，但是dubbo因为不像spring那样有完整的ioc和aop的实现，dubbo就通过这种包装的方式来实现动态增强目标对象功能的作用。</p>
+<h3 id="Lifecycle接口回调"><a href="#Lifecycle接口回调" class="headerlink" title="Lifecycle接口回调"></a>Lifecycle接口回调</h3><p>接下来会调用initExtension方法，这个方法的作用就是判断你的实现类有没有实现Lifecycle接口，如果有的话会调用initialize()方法的实现</p>
+<p>至此，一个可用的实现类对象就算完完全全构建完成了，你拿到的对象就是这个对象，然后就会返回这个对象，存到Holder对象中。</p>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><ol>
+<li><p>包装不是必须的，得看你要获取的对象是什么，如果不要包装，就会回调原始对象的Lifecycle接口，不过dubbo内部的框架基本上获取的都是带包装的对象，而非原始的对象；</p>
+</li>
+<li><p>包装时暴露出去的是包装类的对象，在调用的时候，最先调用的也是包装类的对象，然后一层一层的调用，最终调用到实现类对象。</p>
+</li>
+</ol>
+<h2 id="自适应机制"><a href="#自适应机制" class="headerlink" title="自适应机制"></a>自适应机制</h2><p>自适应：自适应扩展类的含义是说，基于参数，在运行时动态选择到具体的目标类，然后执行。在 Dubbo 中，很多拓展都是通过 SPI 机制进行加载的，比如 Protocol、Cluster、LoadBalance 等。有时，有些拓展并不想在框架启动阶段被加载，而是希望在拓展方法被调用时，根据运行时参数进行加载。这听起来有些矛盾。拓展未被加载，那么拓展方法就无法被调用（静态方法除外）。拓展方法未被调用，拓展就无法被加载。对于这个矛盾的问题，Dubbo 通过自适应拓展机制很好的解决了。</p>
+<p>自适应拓展机制的实现逻辑比较复杂，首先 Dubbo 会为拓展接口生成具有代理功能的代码。然后通过 javassist 或 jdk 编译这段代码，得到 Class 类。最后再通过反射创建代理类，整个过程比较复杂。</p>
+<p>自适应对象获取的方法，就是getAdaptiveExtension方法。构建自适应对象的方法就是createAdaptiveExtension方法的实现。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310232312773.png" alt="image-20230310232312773"></p>
+<p>源码很简单，就是得到自适应的实现类，然后就是普通反射构造，然后经过初始化前，依赖注入，初始化之后，Lifecycle接口回调操作，构造出对象。</p>
+<p>自适应的类有两种来源，一种是自己在实现类上加@Adaptive注解，指定自适应实现类，上面提到的AdaptiveExtensionInjector就是指定的自适应实现类，类上加了@Adaptive注解，如果不指定，dubbo框架会按照一定的规则来动态生成一个自适应的类，构造过程在 createAdaptiveExtensionClass方法实现，最终会调用AdaptiveClassCodeGenerator生成代码。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310232402534.png" alt="image-20230310232402534"></p>
+<h2 id="自动激活"><a href="#自动激活" class="headerlink" title="自动激活"></a>自动激活</h2><p>所谓的自动激活，就是根据你的入参，动态的选择一批实现类返回给你。至于怎么找到，就是通过注解@Activate来实现的。dubbo内部自动激活的主要用在Filter中，Filter是个接口，有很多实现。不论是在provider端还是consumer端，在调用之前，都会经过一个由Filter实现构成的链，这条链的不同实现就是根据入参的不同来区分是每个Filter的实现属于provider的还是consumer端的。</p>
+<p>@Activate它有三个重要属性，group 表示修饰在哪个端，是 provider 还是 consumer，value 表示在 URL参数中出现才会被激活，order 表示实现类的顺序。</p>
+<p><img src="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/image-20230310232541422.png" alt="image-20230310232541422"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><strong>无法确定到底该用哪个实现类——SPI扩展点机制</strong></p>
+<p><strong>一次性全部实现，造成资源的浪费——SPI扩展点机制</strong></p>
+<p>通过key找到文件中对应的value，然后通过反射、利用自适应和自动激活来解决以上问题。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://water001-maker.github.io">Xue_Water</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://water001-maker.github.io/2023/03/10/SPI%E6%9C%BA%E5%88%B6/">https://water001-maker.github.io/2023/03/10/SPI机制/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://water001-maker.github.io" target="_blank">幻想家的秘密基地</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/DUBBO/">DUBBO</a><a class="post-meta__tags" href="/tags/SPI%E6%9C%BA%E5%88%B6/">SPI机制</a></div><div class="post_share"><div class="social-share" data-image="/img/cover13.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/03/05/Dubbo%E6%BA%90%E7%A0%81/" title="Dubbo源码"><img class="cover" src="/img/cover13.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Dubbo源码</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Xue_Water</div><div class="author-info__description">学而不思则罔，思而不学则殆</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">29</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">28</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Water001-maker"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">一个努力学习的小白，会不定期将自己的学习笔记整理到这里，仅供大家学习和参考。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SPI%E6%9C%BA%E5%88%B6"><span class="toc-number">1.</span> <span class="toc-text">SPI机制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#java%E7%9A%84spi%E6%9C%BA%E5%88%B6"><span class="toc-number">2.</span> <span class="toc-text">java的spi机制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#spring%E4%B8%AD%E7%9A%84spi%E6%9C%BA%E5%88%B6"><span class="toc-number">3.</span> <span class="toc-text">spring中的spi机制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dubbo%E7%9A%84spi%E6%9C%BA%E5%88%B6"><span class="toc-number">4.</span> <span class="toc-text">dubbo的spi机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#java%E7%9A%84spi%E6%9C%BA%E5%88%B6%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-number">4.1.</span> <span class="toc-text">java的spi机制的缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dubbo%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%BA%A6%E6%9D%9F"><span class="toc-number">4.2.</span> <span class="toc-text">dubbo的配置文件约束</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SPI%E6%B3%A8%E8%A7%A3%E7%9A%84%E7%BA%A6%E6%9D%9F"><span class="toc-number">4.3.</span> <span class="toc-text">@SPI注解的约束</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD"><span class="toc-number">4.4.</span> <span class="toc-text">实现类的加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E7%B1%BB%E5%AF%B9%E8%B1%A1%E6%9E%84%E9%80%A0"><span class="toc-number">4.5.</span> <span class="toc-text">实现类对象构造</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E5%8C%96%E5%AF%B9%E8%B1%A1"><span class="toc-number">4.5.1.</span> <span class="toc-text">实例化对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%89%8DExtensionPostProcessor-%E5%9B%9E%E8%B0%83"><span class="toc-number">4.5.2.</span> <span class="toc-text">初始化前ExtensionPostProcessor 回调</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5"><span class="toc-number">4.5.3.</span> <span class="toc-text">依赖注入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ExtensionAccessorAware%E6%8E%A5%E5%8F%A3%E5%9B%9E%E8%B0%83"><span class="toc-number">4.5.4.</span> <span class="toc-text">ExtensionAccessorAware接口回调</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%90%8EExtensionPostProcessor%E5%9B%9E%E8%B0%83"><span class="toc-number">4.5.5.</span> <span class="toc-text">初始化后ExtensionPostProcessor回调</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%85%E8%A3%85"><span class="toc-number">4.5.6.</span> <span class="toc-text">自动包装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lifecycle%E6%8E%A5%E5%8F%A3%E5%9B%9E%E8%B0%83"><span class="toc-number">4.5.7.</span> <span class="toc-text">Lifecycle接口回调</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F"><span class="toc-number">4.5.8.</span> <span class="toc-text">注意</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E9%80%82%E5%BA%94%E6%9C%BA%E5%88%B6"><span class="toc-number">4.6.</span> <span class="toc-text">自适应机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E6%BF%80%E6%B4%BB"><span class="toc-number">4.7.</span> <span class="toc-text">自动激活</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/" title="SPI机制"><img src="/img/cover13.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SPI机制"/></a><div class="content"><a class="title" href="/2023/03/10/SPI%E6%9C%BA%E5%88%B6/" title="SPI机制">SPI机制</a><time datetime="2023-03-09T16:00:00.000Z" title="发表于 2023-03-10 00:00:00">2023-03-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/05/Dubbo%E6%BA%90%E7%A0%81/" title="Dubbo源码"><img src="/img/cover13.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Dubbo源码"/></a><div class="content"><a class="title" href="/2023/03/05/Dubbo%E6%BA%90%E7%A0%81/" title="Dubbo源码">Dubbo源码</a><time datetime="2023-03-04T16:00:00.000Z" title="发表于 2023-03-05 00:00:00">2023-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/04/RPC&amp;HTTP/" title="RPC和HTTP"><img src="/img/cover11.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RPC和HTTP"/></a><div class="content"><a class="title" href="/2023/03/04/RPC&amp;HTTP/" title="RPC和HTTP">RPC和HTTP</a><time datetime="2023-03-03T16:00:00.000Z" title="发表于 2023-03-04 00:00:00">2023-03-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/01/Dubbo/" title="Dubbo学习笔记"><img src="/img/cover12.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Dubbo学习笔记"/></a><div class="content"><a class="title" href="/2023/03/01/Dubbo/" title="Dubbo学习笔记">Dubbo学习笔记</a><time datetime="2023-02-28T16:00:00.000Z" title="发表于 2023-03-01 00:00:00">2023-03-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/27/%E8%BF%9B%E7%A8%8B%E4%B9%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E6%B3%95/" title="进程之间的通信方法"><img src="/img/cover14.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="进程之间的通信方法"/></a><div class="content"><a class="title" href="/2023/02/27/%E8%BF%9B%E7%A8%8B%E4%B9%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E6%B3%95/" title="进程之间的通信方法">进程之间的通信方法</a><time datetime="2023-02-26T16:00:00.000Z" title="发表于 2023-02-27 00:00:00">2023-02-27</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/cover13.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Xue_Water</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://water001-maker.github.io/2023/03/10/SPI%E6%9C%BA%E5%88%B6/'
+    this.page.identifier = '/2023/03/10/SPI%E6%9C%BA%E5%88%B6/'
+    this.page.title = 'SPI机制'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+
+  document.getElementById('darkmode').addEventListener('click', () => {
+    setTimeout(() => window.disqusReset(), 200)
+  })
+}
+
+if ('Valine' === 'Disqus' || !false) {
+  if (false) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="true" data-text="JVM,JDK,JRE,Mysql,Redis,Spring,MQ,ES,Oracle,Jva" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
